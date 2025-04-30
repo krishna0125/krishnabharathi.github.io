@@ -63,17 +63,10 @@ theme: jekyll-theme-cayman
 
 # KRISHNABHARATHI RAVISANKAR
 
-<div class="contact-badges">
-  <a href="https://www.linkedin.com/in/krishnabharathi-ravisankar-424a99155/" target="_blank">
-    ![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-blue?style=for-the-badge&logo=linkedin)
-  </a>
-  <a href="mailto:krishaug97@gmail.com">
-    ![Email](https://img.shields.io/badge/Email-krishaug97@gmail.com-red?style=for-the-badge&logo=gmail)
-  </a>
-  <a href="tel:+919597750236">
-    ![Phone](https://img.shields.io/badge/Phone-+91%209597750236-green?style=for-the-badge&logo=phone)
-  </a>
-</div>
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/krishnabharathi-ravisankar-424a99155/)
+[![Email](https://img.shields.io/badge/Email-krishaug97@gmail.com-red?style=for-the-badge&logo=gmail)](mailto:krishaug97@gmail.com)
+[![Phone](https://img.shields.io/badge/Phone-+91%209597750236-green?style=for-the-badge&logo=phone)](tel:+919597750236)
+
 
 <div class="section-box">
   <h2>🎓 Education</h2>
