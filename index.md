@@ -1,156 +1,63 @@
----
-title: KRISHNABHARATHI RAVISANKAR
-theme: jekyll-theme-cayman
----
 
-<style>
-  /* Container box for sections */
-  .section-box {
-    background: #f0f4ff;
-    border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-    padding: 1.5rem 2rem;
-    margin-bottom: 2.5rem;
-  }
+layout: default title: "Krishnabharathi Ravisankar — In Orbit Around Curiosity" permalink: /
+Hello, Fellow Traveler. 🪐
+"Jupiter takes the hits so Earth can have springtimes."
+Somewhere between the swirling ammonia storms of the Great Red Spot and an unhandled CUDA out-of-memory exception on an A100 GPU, you'll find me: Krishnabharathi Ravisankar.
 
-  /* Heading styles */
-  h1, h2 {
-    color: #1a237e;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-  }
+I am a statistician by roots, an AI / Machine Learning Engineer by craft, and an incorrigibly curious carbon-based lifeform by design.
 
-  /* Contact badges container */
-  .contact-badges a {
-    margin-right: 1rem;
-  }
-
-  /* Skills table with colored cells */
-  .skills-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 0.75rem;
-  }
-
-  .skills-table td {
-    background: #d9e4ff;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    font-weight: 600;
-    color: #0d47a1;
-    vertical-align: top;
-  }
-
-  /* Experience job title */
-  .job-title {
-    color: #283593;
-    font-weight: 700;
-    margin-bottom: 0.25rem;
-  }
-
-  /* Date style */
-  .job-date {
-    font-style: italic;
-    color: #5c6bc0;
-    margin-bottom: 0.75rem;
-  }
-
-  /* List styling */
-  ul {
-    margin-top: 0;
-    padding-left: 1.25rem;
-  }
-</style>
-
-# KRISHNABHARATHI RAVISANKAR
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/krishnabharathi-ravisankar-424a99155/)
-[![Email](https://img.shields.io/badge/Email-krishaug97@gmail.com-red?style=for-the-badge&logo=gmail)](mailto:krishaug97@gmail.com)
-[![Phone](https://img.shields.io/badge/Phone-+91%209597750236-green?style=for-the-badge&logo=phone)](tel:+919597750236)
+Welcome to my small corner of the web. Take off your space helmet, pour yourself something warm, and wander around.
 
 
-<div class="section-box">
-  <h2>🎓 Education</h2>
+🔭 The View from 5.2 Astronomical Units (Why Jupiter?)
+People often ask what their favorite planet says about them. Mars gets all the glamorous colonizers. Saturn has the flashy jewelry.
 
-  <p><strong>Master of Science in Big Data Analytics</strong><br>
-  <em>St Joseph’s College, Bangalore</em> | 2018 – 2020</p>
+I’ve always loved Jupiter.
 
-  <p><strong>Bachelor of Science in Statistics</strong><br>
-  <em>Madras Christian College, Chennai</em> | 2015 – 2018</p>
-</div>
+Jupiter is the unsung guardian of the solar system. For 4.5 billion years, its immense gravitational shield has silently absorbed and redirected wandering comets and rogue asteroids away from the inner planets—quietly protecting our fragile blue marble so we can sit here, brew coffee, and write code that crashes at 2:00 AM.
 
-<div class="section-box">
-  <h2>🛠 Skills</h2>
+Jupiter reminds me of what good engineering and good humanity should look like:
 
-  <table class="skills-table">
-    <tr>
-      <td><strong>Machine Learning & Development</strong></td>
-      <td>Python, R, Dash, Rshiny, Flask, Streamlit, FastAPI</td>
-    </tr>
-    <tr>
-      <td><strong>Cloud & DevOps</strong></td>
-      <td>Azure AI Search, Redis, AI Studio, Blob Storage, Web Apps, Function Apps, Azure DevOps, Document Intelligence</td>
-    </tr>
-    <tr>
-      <td><strong>Data Science & Analytics</strong></td>
-      <td>Tableau, Power BI, Excel, SQL, Pandas, PyTorch, Linux GPU Machines</td>
-    </tr>
-    <tr>
-      <td><strong>Others</strong></td>
-      <td>Git, Docker, MongoDB, Shell Scripting</td>
-    </tr>
-  </table>
-</div>
+Absorb the chaos: Be the stabilizing force in production outages, messy datasets, and team crises.
+Remain humble: You can be the biggest entity in the room (or the system architecture) and still acknowledge that 99.9% of the universe is mystery.
+Keep swirling: The Great Red Spot has been storming for centuries; persistence and curiosity outlast temporary turbulence.
 
-<div class="section-box">
-  <h2>💼 Professional Experience</h2>
 
-  <div>
-    <div class="job-title">EY GDS - AI / Machine Learning Engineer</div>
-    <div class="job-date">Dec 2021 – Present</div>
-    <ul>
-      <li>Architected and deployed <strong>Generative AI solutions</strong> automating document review and compliance workflows, improving accuracy and efficiency.</li>
-      <li>Enhanced risk assessment processes by implementing <strong>cross-referencing mechanisms</strong>, accelerating evaluation speed.</li>
-      <li>Led development of <strong>key-phrase mapping</strong> and advanced search modules to optimize enterprise knowledge management.</li>
-      <li>Fine-tuned OpenAI models and built <strong>cluster-based question routing systems</strong> to improve response relevance.</li>
-      <li>Directed domain-specific <strong>Large Language Model (LLM) training</strong>, achieving 80% accuracy on custom datasets.</li>
-      <li>Developed <strong>multi-class text classification models</strong> for compliance and bill verification use cases.</li>
-    </ul>
-  </div>
+🧭 My Trajectory: From P-Values to Prompt Engineering
+Before neural networks convinced the world that human intelligence could be approximated by multiplying high-dimensional floating-point numbers, I was a pure statistician:
 
-  <div>
-    <div class="job-title">Federal Bank Limited - Analytics Officer</div>
-    <div class="job-date">Sep 2020 – Dec 2021</div>
-    <ul>
-      <li>Built <strong>ensemble models</strong> for risk-based pricing and customer propensity prediction, enhancing credit decisioning.</li>
-      <li>Managed analytics for digital loan portfolios and generated comprehensive monthly reports for stakeholders.</li>
-    </ul>
-  </div>
+The Foundations: Studied Bachelor of Science in Statistics at Madras Christian College, followed by a Master's in Big Data Analytics at St. Joseph's College, Bangalore. I spent years calculating confidence intervals, hypothesis tests, and standard errors before deep learning made everyone forget what a variance formula looks like.
+The Exploration: Traversed risk pricing models at Federal Bank, anomaly dashboards at TCS, and computer vision for digital pathology at Spectral Insights.
+The Current Orbit: Over the last 5+ years (currently at EY GDS), I've been building enterprise Generative AI agents, LangGraph orchestration engines, and domain-specific LLM pipelines.
 
-  <div>
-    <div class="job-title">Tata Consultancy Services - Intern</div>
-    <div class="job-date">Dec 2019 – Apr 2020</div>
-    <ul>
-      <li>Developed a <strong>predictive asset management dashboard</strong> using Python Dash, enabling real-time insights.</li>
-    </ul>
-  </div>
 
-  <div>
-    <div class="job-title">Spectral Insights Pvt Ltd - Data Science Intern</div>
-    <div class="job-date">Jan 2017 – Jul 2018</div>
-    <ul>
-      <li>Created Flask and Shiny web applications for <strong>image segmentation</strong> and <strong>statistical analysis</strong>, supporting research initiatives.</li>
-    </ul>
-  </div>
-</div>
+🛠️ Things I Build (and the Bugs I Apologize To)
+I build things that help humans think better, search clearer, and drown in less administrative noise:
 
-<div class="section-box">
-  <h2>🏆 Hackathons & Achievements</h2>
-  <ul>
-    <li><strong>EY FROG Discovery Tool</strong> - Semi-Finalist</li>
-    <li><strong>LTFS Analytics Vidhya Hackathon</strong> - Ranked under 13th percentile</li>
-  </ul>
-</div>
+Autonomous Agents & LangGraph Workflows: Building multi-agent platforms where tools register dynamically and bots don't wander off into existential loops.
+LLM Fine-Tuning & Reinforcement Learning: Coaxing open-source models (Llama, RedPajama) to achieve 80%+ accuracy on specialized domain tasks without hallucinating alternate realities.
+Search & Knowledge Retrieval: Hybrid vector search with Azure AI Search and Redis—because finding the right needle in an enterprise haystack shouldn't take three solar orbits.
+Open Source & Hackathons:
+Contributed to open-source evaluation tools like DeepEval and docstrings in folium.
+Built RiskCopilot / RFR for the Snowflake CoCo CLI Hackathon—turning dry compliance reviews into swift, intelligent audits.
 
----
 
-<p style="text-align:center; font-style: italic; color: #555;">Last updated: April 29, 2025</p>
+💛 A Small Philosophy on Silicon & Empathy
+Here is the truth they don’t write in benchmark papers: Technology is meaningless without kindness.
+
+An AI agent that shaves 400 milliseconds off a query is nice. But an engineer who takes 30 minutes to mentor a junior teammate, who listens without ego during an architecture debate, and who remembers that there is a tired human being on the other end of every screen—that is what actually moves the needle.
+
+We are all riding a speck of dust suspended in a sunbeam. The algorithms will become obsolete. The weights will be overwritten. But the empathy, patience, and curiosity we put into the world remain in orbit forever.
+
+
+🌌 Let’s Establish Communications
+Whether you want to debate whether multi-agent systems need hierarchical supervisors, talk about the Jovian moons (Europa is fascinating, don't @ me), or build something genuinely helpful:
+
+💼 LinkedIn: krishnabharathi-ravisankar
+💻 GitHub: @krishna0125
+📄 Curriculum Vitae: Download Resume (PDF)
+📬 Transmission Frequency: krishaug97@gmail.com
+
+
+
+Built with curiosity, powered by stardust, and committed with git.
