@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Krishnabharathi Ravisankar | AI/ML Engineer</title>
+  <style>
+    :root {
+      --bg: #070913;
+      --card-bg: rgba(18, 24, 38, 0.75);
+      --card-border: rgba(255, 170, 110, 0.18);
+      --accent: #ff9d5c;
+      --accent-glow: rgba(255, 157, 92, 0.4);
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    /* Starfield background */
+    canvas#starfield {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 3.5rem 1.5rem 5rem;
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    /* Graphic: Jupiter */
+    .planet-stage {
+      position: relative;
+      width: 170px;
+      height: 170px;
+      margin: 0 auto 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .jupiter-sphere {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: repeating-linear-gradient(
+        175deg,
+        #24140d 0px,
+        #4a2818 10px,
+        #c38b60 18px,
+        #e0b48c 28px,
+        #995530 38px,
+        #d8a478 48px,
+        #361d12 58px,
+        #a6643c 68px,
+        #edd3b6 78px,
+        #783c22 88px,
+        #c38b60 98px,
+        #24140d 110px
+      );
+      background-size: 200% 200%;
+      animation: rotateBands 26s linear infinite;
+      box-shadow: 
+        inset -28px -20px 48px rgba(0, 0, 0, 0.9),
+        inset 12px 12px 25px rgba(255, 205, 160, 0.4),
+        0 0 50px var(--accent-glow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .great-red-spot {
+      position: absolute;
+      bottom: 38px;
+      right: 30px;
+      width: 32px;
+      height: 20px;
+      background: radial-gradient(ellipse at center, #9e2a18 0%, #d45032 60%, rgba(158, 42, 24, 0) 100%);
+      border-radius: 50%;
+      transform: rotate(-10deg);
+      box-shadow: 0 0 10px rgba(212, 80, 50, 0.7);
+    }
+
+    .orbit-ring {
+      position: absolute;
+      width: 185px;
+      height: 185px;
+      border: 1px dashed rgba(255, 157, 92, 0.35);
+      border-radius: 50%;
+      animation: spinOrbit 40s linear infinite;
+    }
+
+    @keyframes rotateBands {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes spinOrbit {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 0.9rem;
+      border-radius: 9999px;
+      background: rgba(255, 157, 92, 0.12);
+      border: 1px solid rgba(255, 157, 92, 0.35);
+      color: var(--accent);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      margin-bottom: 0.75rem;
+    }
+
+    .punchline {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 620px;
+      margin: 0 auto 2rem;
+    }
+
+    /* Actions */
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.85rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.65rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #070913;
+    }
+
+    .btn-primary:hover {
+      background: #ffb17e;
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 157, 92, 0.4);
+    }
+
+    /* Cards */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.6rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .card h2 {
+      font-size: 1.1rem;
+      color: #ffffff;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .card p {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 0.85rem;
+    }
+
+    .card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .card a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .card a:hover {
+      text-decoration: underline;
+    }
+
+    /* Tags */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 0.75rem;
+    }
+
+    .chip {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.55rem;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #cbd5e1;
+      font-family: monospace;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="starfield"></canvas>
+
+  <div class="container">
+    <div class="hero">
+      <div class="planet-stage">
+        <div class="orbit-ring"></div>
+        <div class="jupiter-sphere">
+          <div class="great-red-spot"></div>
+        </div>
+      </div>
+
+      <div class="badge">🪐 5.2 AU • Orbiting Curiosity</div>
+      <h1>Krishnabharathi Ravisankar</h1>
+      <p class="punchline">
+        Statistician by roots, AI/ML Engineer by craft.<br>
+        Absorbing production chaos like Jupiter absorbs asteroid strikes.
+      </p>
+
+      <div class="button-row">
+        <a href="https://github.com/krishna0125" class="btn btn-primary" target="_blank">GitHub</a>
+        <a href="https://www.linkedin.com/in/krishnabharathi-ravisankar-424a99155/" class="btn btn-secondary" target="_blank">LinkedIn</a>
+        <a href="https://drive.google.com/file/d/1QaqQh59BEgyxe_Md5RvHGS7F3AkaLMwB/view?usp=drivesdk" class="btn btn-secondary" target="_blank">Resume (PDF)</a>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>🔭 Telemetry</h2>
+        <p>
+          Started with hypothesis testing and normal distributions before LLMs convinced the world that intelligence is just high-dimensional vector math.
+        </p>
+        <p>
+          5+ years building enterprise GenAI agents, fine-tuning open models, and surviving 2 AM GPU memory crashes. Big on curiosity, low on ego.
+        </p>
+        <div class="chips">
+          <span class="chip">B.Sc. Stats (MCC)</span>
+          <span class="chip">M.Sc. Big Data (St. Joseph's)</span>
+          <span class="chip">EY GDS</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>🛰️ What I Ship</h2>
+        <p>
+          <strong>Enterprise Agents:</strong> Multi-agent platforms with LangGraph & FastAPI with dynamic tool management.
+        </p>
+        <p>
+          <strong>Domain LLMs:</strong> Fine-tuning open models (Llama/RedPajama) with RL pipelines for 80%+ accuracy.
+        </p>
+        <p>
+          <strong>Hackathons & OSS:</strong> <a href="https://github.com/krishna0125/RFR" target="_blank">RiskCopilot (RFR)</a> for Snowflake CoCo CLI & contributions to <a href="https://deepeval.com/" target="_blank">DeepEval</a>.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>🧰 Exploration Gear</h2>
+        <p>Tools used to build and explore:</p>
+        <div class="chips">
+          <span class="chip">Python</span>
+          <span class="chip">LangGraph</span>
+          <span class="chip">FastAPI</span>
+          <span class="chip">Azure AI Search</span>
+          <span class="chip">PyTorch</span>
+          <span class="chip">Redis</span>
+          <span class="chip">Docker</span>
+          <span class="chip">Linux GPUs</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>💛 Silicon & People</h2>
+        <p>
+          Models don't drink coffee or stress over deploy logs; people do.
+        </p>
+        <p>
+          Beyond vector search and loss curves, I value patient mentoring, compassionate reviews, and leaving systems (and teams) in a calmer orbit than I found them.
+        </p>
+      </div>
+    </div>
+
+    <footer>
+      Built with stardust, HTML/CSS, and git • <a href="mailto:krishaug97@gmail.com">krishaug97@gmail.com</a>
+    </footer>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      stars = Array.from({ length: 150 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 1.6 + 0.4,
+        alpha: Math.random() * 0.7 + 0.2,
+        speed: Math.random() * 0.015 + 0.005
+      }));
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      stars.forEach(s => {
+        s.alpha += s.speed;
+        if (s.alpha > 0.95 || s.alpha < 0.2) s.speed = -s.speed;
+        ctx.fillStyle = `rgba(255, 255, 255, ${Math.abs(s.alpha)})`;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    animate();
+  </script>
+</body>
+</html>
