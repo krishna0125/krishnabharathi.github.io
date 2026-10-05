@@ -1,1 +1,0 @@
-# krishnabharathi.github.io
