@@ -7,9 +7,10 @@
   <style>
     :root {
       --bg: #070913;
-      --card-bg: rgba(18, 24, 38, 0.75);
+      --card-bg: rgba(18, 24, 38, 0.7);
       --card-border: rgba(255, 170, 110, 0.18);
       --accent: #ff9d5c;
+      --accent-2: #ff5f6d;
       --accent-glow: rgba(255, 157, 92, 0.4);
       --text: #e2e8f0;
       --muted: #94a3b8;
@@ -18,19 +19,21 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background-color: var(--bg);
+      background:
+        radial-gradient(60% 40% at 15% 10%, rgba(255, 95, 109, 0.14), transparent 70%),
+        radial-gradient(50% 40% at 90% 30%, rgba(90, 110, 255, 0.14), transparent 70%),
+        radial-gradient(60% 50% at 50% 100%, rgba(255, 157, 92, 0.10), transparent 70%),
+        var(--bg);
+      background-attachment: fixed;
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
-      position: relative;
       line-height: 1.6;
     }
 
-    /* Starfield background */
     canvas#starfield {
-      position: fixed;
-      top: 0; left: 0;
+      position: fixed; inset: 0;
       width: 100%; height: 100%;
       z-index: 0;
       pointer-events: none;
@@ -39,88 +42,78 @@
     .container {
       position: relative;
       z-index: 1;
-      max-width: 860px;
+      max-width: 900px;
       margin: 0 auto;
-      padding: 3.5rem 1.5rem 5rem;
+      padding: 3.5rem 1.5rem 4rem;
     }
 
-    /* Hero */
-    .hero {
-      text-align: center;
-      margin-bottom: 3.5rem;
-    }
+    /* ---------- Hero ---------- */
+    .hero { text-align: center; margin-bottom: 3rem; }
 
-    /* Graphic: Jupiter */
     .planet-stage {
       position: relative;
-      width: 170px;
-      height: 170px;
-      margin: 0 auto 1.75rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 260px; height: 260px;
+      margin: 0 auto 1.5rem;
+      display: flex; align-items: center; justify-content: center;
     }
 
     .jupiter-sphere {
-      width: 150px;
-      height: 150px;
+      width: 150px; height: 150px;
       border-radius: 50%;
       background: repeating-linear-gradient(
         175deg,
-        #24140d 0px,
-        #4a2818 10px,
-        #c38b60 18px,
-        #e0b48c 28px,
-        #995530 38px,
-        #d8a478 48px,
-        #361d12 58px,
-        #a6643c 68px,
-        #edd3b6 78px,
-        #783c22 88px,
-        #c38b60 98px,
-        #24140d 110px
+        #24140d 0px, #4a2818 10px, #c38b60 18px, #e0b48c 28px,
+        #995530 38px, #d8a478 48px, #361d12 58px, #a6643c 68px,
+        #edd3b6 78px, #783c22 88px, #c38b60 98px, #24140d 110px
       );
       background-size: 200% 200%;
       animation: rotateBands 26s linear infinite;
-      box-shadow: 
+      box-shadow:
         inset -28px -20px 48px rgba(0, 0, 0, 0.9),
         inset 12px 12px 25px rgba(255, 205, 160, 0.4),
-        0 0 50px var(--accent-glow);
+        0 0 70px var(--accent-glow);
       position: relative;
       overflow: hidden;
+      z-index: 2;
     }
 
     .great-red-spot {
       position: absolute;
-      bottom: 38px;
-      right: 30px;
-      width: 32px;
-      height: 20px;
+      bottom: 38px; right: 30px;
+      width: 32px; height: 20px;
       background: radial-gradient(ellipse at center, #9e2a18 0%, #d45032 60%, rgba(158, 42, 24, 0) 100%);
       border-radius: 50%;
       transform: rotate(-10deg);
       box-shadow: 0 0 10px rgba(212, 80, 50, 0.7);
     }
 
-    .orbit-ring {
+    /* Orbits with moons */
+    .orbit {
       position: absolute;
-      width: 185px;
-      height: 185px;
-      border: 1px dashed rgba(255, 157, 92, 0.35);
+      border: 1px dashed rgba(255, 157, 92, 0.28);
       border-radius: 50%;
-      animation: spinOrbit 40s linear infinite;
+      animation: spin linear infinite;
     }
+    .orbit::after {
+      content: "";
+      position: absolute;
+      top: -5px; left: 50%;
+      width: 10px; height: 10px;
+      margin-left: -5px;
+      border-radius: 50%;
+      background: var(--moon);
+      box-shadow: 0 0 12px var(--moon);
+    }
+    .o1 { width: 190px; height: 190px; animation-duration: 9s;  --moon: #ffd9a8; }
+    .o2 { width: 225px; height: 225px; animation-duration: 16s; --moon: #8ec5ff; animation-direction: reverse; }
+    .o3 { width: 260px; height: 260px; animation-duration: 28s; --moon: #ff8f8f; }
 
     @keyframes rotateBands {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-
-    @keyframes spinOrbit {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     .badge {
       display: inline-block;
@@ -129,7 +122,7 @@
       background: rgba(255, 157, 92, 0.12);
       border: 1px solid rgba(255, 157, 92, 0.35);
       color: var(--accent);
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 600;
       letter-spacing: 0.05em;
       text-transform: uppercase;
@@ -137,133 +130,166 @@
     }
 
     h1 {
-      font-size: clamp(2rem, 5vw, 2.8rem);
-      font-weight: 700;
+      font-size: clamp(2rem, 5.5vw, 3rem);
+      font-weight: 800;
       letter-spacing: -0.02em;
-      color: #ffffff;
-      margin-bottom: 0.75rem;
+      background: linear-gradient(90deg, #fff 0%, #ffd2a8 45%, var(--accent) 70%, var(--accent-2) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: shine 6s linear infinite;
+      margin-bottom: 0.6rem;
     }
+    @keyframes shine { to { background-position: 200% center; } }
 
     .punchline {
       font-size: 1.15rem;
       color: var(--muted);
-      max-width: 620px;
-      margin: 0 auto 2rem;
+      margin: 0 auto 1.75rem;
     }
+    .punchline b { color: #fff; font-weight: 600; }
 
-    /* Actions */
     .button-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.85rem;
+      display: flex; flex-wrap: wrap;
+      justify-content: center; gap: 0.8rem;
     }
 
     .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.65rem 1.25rem;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      font-weight: 600;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.65rem 1.3rem;
+      border-radius: 10px;
+      font-size: 0.9rem; font-weight: 600;
       text-decoration: none;
-      transition: all 0.2s ease;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
     }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #070913;
-    }
-
-    .btn-primary:hover {
-      background: #ffb17e;
-      box-shadow: 0 0 20px var(--accent-glow);
-    }
-
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #070913; }
+    .btn-primary:hover { box-shadow: 0 6px 24px var(--accent-glow); }
     .btn-secondary {
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #ffffff;
+      color: #fff;
     }
+    .btn-secondary:hover { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 157, 92, 0.5); }
 
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: rgba(255, 157, 92, 0.4);
+    /* ---------- Stats ---------- */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
     }
+    .stat {
+      text-align: center;
+      padding: 1.1rem 0.5rem;
+      border-radius: 14px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(10px);
+    }
+    .stat .num {
+      font-size: 2rem; font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .stat .label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
 
-    /* Cards */
+    /* ---------- Cards ---------- */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
       gap: 1.25rem;
-      margin-bottom: 3.5rem;
+      margin-bottom: 3rem;
     }
 
     .card {
+      position: relative;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 1.6rem;
+      border-radius: 16px;
+      padding: 1.5rem;
       backdrop-filter: blur(10px);
+      overflow: hidden;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .card::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), var(--accent-2), transparent);
+      opacity: 0.7;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(255, 157, 92, 0.5);
+      box-shadow: 0 10px 40px rgba(255, 157, 92, 0.15);
     }
 
     .card h2 {
-      font-size: 1.1rem;
-      color: #ffffff;
-      margin-bottom: 0.75rem;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .card p {
-      font-size: 0.92rem;
-      color: var(--muted);
-      line-height: 1.6;
+      font-size: 1.1rem; color: #fff;
       margin-bottom: 0.85rem;
+      display: flex; align-items: center; gap: 0.55rem;
+    }
+    .icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px;
+      border-radius: 10px;
+      background: rgba(255, 157, 92, 0.14);
+      border: 1px solid rgba(255, 157, 92, 0.3);
+      font-size: 1.05rem;
     }
 
-    .card p:last-child {
-      margin-bottom: 0;
+    .list { list-style: none; }
+    .list li {
+      position: relative;
+      padding-left: 1.2rem;
+      font-size: 0.93rem;
+      color: var(--muted);
+      margin-bottom: 0.55rem;
     }
-
-    .card a {
-      color: var(--accent);
-      text-decoration: none;
+    .list li:last-child { margin-bottom: 0; }
+    .list li::before {
+      content: "";
+      position: absolute; left: 0; top: 0.55em;
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent-glow);
     }
+    .list b { color: #fff; font-weight: 600; }
+    .card a { color: var(--accent); text-decoration: none; }
+    .card a:hover { text-decoration: underline; }
 
-    .card a:hover {
-      text-decoration: underline;
-    }
-
-    /* Tags */
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.45rem;
-      margin-top: 0.75rem;
-    }
-
+    .chips { display: flex; flex-wrap: wrap; gap: 0.45rem; }
     .chip {
-      font-size: 0.75rem;
-      padding: 0.25rem 0.55rem;
-      border-radius: 5px;
+      font-size: 0.78rem;
+      padding: 0.28rem 0.6rem;
+      border-radius: 6px;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
       color: #cbd5e1;
-      font-family: monospace;
+      font-family: ui-monospace, Consolas, monospace;
+      transition: all 0.2s ease;
     }
-
-    footer {
-      text-align: center;
-      font-size: 0.85rem;
-      color: #64748b;
+    .chip:hover {
+      color: #fff;
+      border-color: var(--accent);
+      background: rgba(255, 157, 92, 0.15);
+      transform: translateY(-2px);
     }
+    .chips.mt { margin-top: 0.9rem; }
 
-    footer a {
-      color: var(--accent);
-      text-decoration: none;
+    .wide { grid-column: 1 / -1; }
+
+    footer { text-align: center; font-size: 0.85rem; color: #64748b; }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    /* Reveal on load */
+    .reveal { opacity: 0; transform: translateY(18px); animation: rise 0.7s ease forwards; }
+    @keyframes rise { to { opacity: 1; transform: none; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; }
+      .reveal { opacity: 1; transform: none; }
     }
   </style>
 </head>
@@ -273,18 +299,15 @@
   <div class="container">
     <div class="hero">
       <div class="planet-stage">
-        <div class="orbit-ring"></div>
-        <div class="jupiter-sphere">
-          <div class="great-red-spot"></div>
-        </div>
+        <div class="orbit o3"></div>
+        <div class="orbit o2"></div>
+        <div class="orbit o1"></div>
+        <div class="jupiter-sphere"><div class="great-red-spot"></div></div>
       </div>
 
-      <div class="badge">🪐 5.2 AU • Orbiting Curiosity</div>
+      <div class="badge">🪐 AI/ML Engineer</div>
       <h1>Krishnabharathi Ravisankar</h1>
-      <p class="punchline">
-        Statistician by roots, AI/ML Engineer by craft.<br>
-        Absorbing production chaos like Jupiter absorbs asteroid strikes.
-      </p>
+      <p class="punchline">Statistician turned <b>GenAI engineer</b>. I build things that survive production.</p>
 
       <div class="button-row">
         <a href="https://github.com/krishna0125" class="btn btn-primary" target="_blank">GitHub</a>
@@ -293,38 +316,38 @@
       </div>
     </div>
 
+    <div class="stats reveal" style="animation-delay:.1s">
+      <div class="stat"><div class="num" data-to="5" data-suffix="+">0</div><div class="label">Years</div></div>
+      <div class="stat"><div class="num" data-to="80" data-suffix="%+">0</div><div class="label">Model accuracy</div></div>
+      <div class="stat"><div class="num" data-to="2" data-suffix="">0</div><div class="label">Degrees</div></div>
+      <div class="stat"><div class="num">EY</div><div class="label">GDS</div></div>
+    </div>
+
     <div class="grid">
-      <div class="card">
-        <h2>🔭 Telemetry</h2>
-        <p>
-          Started with hypothesis testing and normal distributions before LLMs convinced the world that intelligence is just high-dimensional vector math.
-        </p>
-        <p>
-          5+ years building enterprise GenAI agents, fine-tuning open models, and surviving 2 AM GPU memory crashes. Big on curiosity, low on ego.
-        </p>
-        <div class="chips">
-          <span class="chip">B.Sc. Stats (MCC)</span>
-          <span class="chip">M.Sc. Big Data (St. Joseph's)</span>
-          <span class="chip">EY GDS</span>
+      <div class="card reveal" style="animation-delay:.2s">
+        <h2><span class="icon">🔭</span>About</h2>
+        <ul class="list">
+          <li>Started in <b>statistics</b>, now building <b>GenAI</b>.</li>
+          <li>5+ years shipping enterprise AI agents.</li>
+          <li>Curious. Low ego.</li>
+        </ul>
+        <div class="chips mt">
+          <span class="chip">B.Sc. Stats · MCC</span>
+          <span class="chip">M.Sc. Big Data · St. Joseph's</span>
         </div>
       </div>
 
-      <div class="card">
-        <h2>🛰️ What I Ship</h2>
-        <p>
-          <strong>Enterprise Agents:</strong> Multi-agent platforms with LangGraph & FastAPI with dynamic tool management.
-        </p>
-        <p>
-          <strong>Domain LLMs:</strong> Fine-tuning open models (Llama/RedPajama) with RL pipelines for 80%+ accuracy.
-        </p>
-        <p>
-          <strong>Hackathons & OSS:</strong> <a href="https://github.com/krishna0125/RFR" target="_blank">RiskCopilot (RFR)</a> for Snowflake CoCo CLI & contributions to <a href="https://deepeval.com/" target="_blank">DeepEval</a>.
-        </p>
+      <div class="card reveal" style="animation-delay:.3s">
+        <h2><span class="icon">🛰️</span>What I Ship</h2>
+        <ul class="list">
+          <li><b>Agents:</b> multi-agent platforms with LangGraph and FastAPI.</li>
+          <li><b>Domain LLMs:</b> fine-tuned Llama / RedPajama with RL, 80%+ accuracy.</li>
+          <li><b>OSS:</b> <a href="https://github.com/krishna0125/RFR" target="_blank">RiskCopilot</a> for Snowflake CoCo CLI, and <a href="https://deepeval.com/" target="_blank">DeepEval</a> contributions.</li>
+        </ul>
       </div>
 
-      <div class="card">
-        <h2>🧰 Exploration Gear</h2>
-        <p>Tools used to build and explore:</p>
+      <div class="card reveal" style="animation-delay:.4s">
+        <h2><span class="icon">🧰</span>Tech Stack</h2>
         <div class="chips">
           <span class="chip">Python</span>
           <span class="chip">LangGraph</span>
@@ -337,19 +360,18 @@
         </div>
       </div>
 
-      <div class="card">
-        <h2>💛 Silicon & People</h2>
-        <p>
-          Models don't drink coffee or stress over deploy logs; people do.
-        </p>
-        <p>
-          Beyond vector search and loss curves, I value patient mentoring, compassionate reviews, and leaving systems (and teams) in a calmer orbit than I found them.
-        </p>
+      <div class="card reveal" style="animation-delay:.5s">
+        <h2><span class="icon">💛</span>Beyond Code</h2>
+        <ul class="list">
+          <li>Mentoring with patience.</li>
+          <li>Kind code reviews.</li>
+          <li>Leave teams calmer than I found them.</li>
+        </ul>
       </div>
     </div>
 
     <footer>
-      Built with stardust, HTML/CSS, and git • <a href="mailto:krishaug97@gmail.com">krishaug97@gmail.com</a>
+      Built with stardust, HTML/CSS &amp; git · <a href="mailto:krishaug97@gmail.com">krishaug97@gmail.com</a>
     </footer>
   </div>
 
@@ -357,11 +379,12 @@
     const canvas = document.getElementById('starfield');
     const ctx = canvas.getContext('2d');
     let stars = [];
+    let comets = [];
 
     function resize() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      stars = Array.from({ length: 150 }, () => ({
+      stars = Array.from({ length: 160 }, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
         size: Math.random() * 1.6 + 0.4,
@@ -370,8 +393,20 @@
       }));
     }
 
+    function spawnComet() {
+      comets.push({
+        x: Math.random() * canvas.width * 0.8 + canvas.width * 0.2,
+        y: -10,
+        vx: -(Math.random() * 4 + 5),
+        vy: Math.random() * 3 + 4,
+        life: 1
+      });
+    }
+    setInterval(() => { if (comets.length < 2) spawnComet(); }, 3500);
+
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
       stars.forEach(s => {
         s.alpha += s.speed;
         if (s.alpha > 0.95 || s.alpha < 0.2) s.speed = -s.speed;
@@ -380,12 +415,38 @@
         ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
         ctx.fill();
       });
+
+      comets = comets.filter(c => c.life > 0 && c.y < canvas.height + 50);
+      comets.forEach(c => {
+        const g = ctx.createLinearGradient(c.x, c.y, c.x - c.vx * 10, c.y - c.vy * 10);
+        g.addColorStop(0, `rgba(255, 200, 150, ${c.life})`);
+        g.addColorStop(1, 'rgba(255, 200, 150, 0)');
+        ctx.strokeStyle = g;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(c.x, c.y);
+        ctx.lineTo(c.x - c.vx * 10, c.y - c.vy * 10);
+        ctx.stroke();
+        c.x += c.vx; c.y += c.vy; c.life -= 0.004;
+      });
+
       requestAnimationFrame(animate);
     }
 
     window.addEventListener('resize', resize);
     resize();
     animate();
+
+    // Count-up stats
+    document.querySelectorAll('.num[data-to]').forEach(el => {
+      const to = +el.dataset.to, suffix = el.dataset.suffix || '';
+      const start = performance.now(), dur = 1400;
+      (function tick(now) {
+        const p = Math.min((now - start) / dur, 1);
+        el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3))) + (p === 1 ? suffix : '');
+        if (p < 1) requestAnimationFrame(tick);
+      })(start);
+    });
   </script>
 </body>
 </html>
