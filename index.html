@@ -3,450 +3,635 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Krishnabharathi Ravisankar | AI/ML Engineer</title>
+  <title>KB | Krishnabharathi Ravisankar · AI/ML Engineer</title>
+  <meta name="description" content="Interactive portfolio of KB, an AI/ML engineer building enterprise agents, RAG and domain LLMs. Ask his agent anything.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cellipse cx='30' cy='20' rx='7' ry='13' transform='rotate(-20 30 20)' fill='%23cfe8ff'/%3E%3Cellipse cx='40' cy='20' rx='7' ry='13' transform='rotate(20 40 20)' fill='%23cfe8ff'/%3E%3Cellipse cx='36' cy='38' rx='17' ry='13' fill='%23ffc21a'/%3E%3Crect x='30' y='25' width='5' height='26' fill='%231a1208'/%3E%3Crect x='41' y='25' width='5' height='26' fill='%231a1208'/%3E%3Ccircle cx='17' cy='38' r='9' fill='%231a1208'/%3E%3C/svg%3E">
   <style>
     :root {
       --bg: #070913;
-      --card-bg: rgba(18, 24, 38, 0.7);
-      --card-border: rgba(255, 170, 110, 0.18);
+      --card: rgba(16, 22, 36, 0.78);
+      --border: rgba(255, 170, 110, 0.18);
       --accent: #ff9d5c;
       --accent-2: #ff5f6d;
-      --accent-glow: rgba(255, 157, 92, 0.4);
+      --glow: rgba(255, 157, 92, 0.4);
       --text: #e2e8f0;
       --muted: #94a3b8;
+      --green: #4ade80;
+      --blue: #8ec5ff;
+      --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
+    html { scroll-behavior: smooth; scroll-padding-top: 72px; }
     body {
       background:
-        radial-gradient(60% 40% at 15% 10%, rgba(255, 95, 109, 0.14), transparent 70%),
-        radial-gradient(50% 40% at 90% 30%, rgba(90, 110, 255, 0.14), transparent 70%),
-        radial-gradient(60% 50% at 50% 100%, rgba(255, 157, 92, 0.10), transparent 70%),
+        radial-gradient(60% 40% at 10% 5%, rgba(255, 95, 109, .13), transparent 70%),
+        radial-gradient(50% 40% at 95% 25%, rgba(90, 110, 255, .13), transparent 70%),
+        radial-gradient(60% 50% at 50% 100%, rgba(255, 157, 92, .09), transparent 70%),
         var(--bg);
       background-attachment: fixed;
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
       line-height: 1.6;
+      overflow-x: hidden;
     }
+    canvas#starfield { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    button { font: inherit; color: inherit; cursor: pointer; }
 
-    canvas#starfield {
-      position: fixed; inset: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
+    /* ---------- Nav ---------- */
+    nav { position: fixed; inset: 0 0 auto 0; z-index: 20; background: rgba(7, 9, 19, .72); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,.06); }
+    .nav-in { max-width: 1040px; margin: 0 auto; padding: .6rem 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .logo { display: inline-flex; align-items: center; gap: .3rem; font-weight: 800; font-size: 1.15rem; color: #fff; letter-spacing: -.02em; }
+    .logo:hover { text-decoration: none; }
+    .bee { width: 42px; height: 42px; overflow: visible; animation: hover 3s ease-in-out infinite; filter: drop-shadow(0 0 6px rgba(255,194,26,.55)); }
+    .wing { transform-box: fill-box; transform-origin: 50% 100%; animation: flap .18s ease-in-out infinite alternate; }
+    .wing.r { animation-direction: alternate-reverse; }
+    @keyframes flap { from { transform: rotate(-14deg); } to { transform: rotate(10deg); } }
+    @keyframes hover { 0%,100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-3px) rotate(4deg); } }
+    .links { display: flex; align-items: center; gap: 1.1rem; }
+    .links a { color: var(--muted); font-size: .85rem; font-weight: 500; transition: color .2s; }
+    .links a:hover, .links a.active { color: var(--accent); text-decoration: none; }
+    .links .pill { color: #070913; background: linear-gradient(135deg, var(--accent), var(--accent-2)); padding: .35rem .85rem; border-radius: 8px; font-weight: 700; }
+    .links .pill:hover { color: #070913; }
 
-    .container {
-      position: relative;
-      z-index: 1;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 3.5rem 1.5rem 4rem;
-    }
+    .wrap { position: relative; z-index: 1; max-width: 1040px; margin: 0 auto; padding: 0 1.5rem; }
+    section { padding: 4.5rem 0 0; }
+    .sec-head { margin-bottom: 1.5rem; }
+    .eyebrow { font-family: var(--mono); color: var(--accent); font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; }
+    .sec-head h2 { font-size: clamp(1.5rem, 3.5vw, 2.1rem); color: #fff; letter-spacing: -.02em; line-height: 1.2; margin: .25rem 0; }
+    .sec-head p { color: var(--muted); }
 
     /* ---------- Hero ---------- */
-    .hero { text-align: center; margin-bottom: 3rem; }
+    .hero { min-height: 94vh; padding-top: 6rem; display: grid; grid-template-columns: 1.25fr 1fr; align-items: center; gap: 2rem; }
+    .badge { display: inline-flex; align-items: center; gap: .5rem; padding: .35rem .9rem; border-radius: 9999px; background: rgba(255,157,92,.12); border: 1px solid rgba(255,157,92,.35); color: var(--accent); font-size: .78rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 1.1rem; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(74,222,128,.7); } 70%,100% { box-shadow: 0 0 0 9px rgba(74,222,128,0); } }
+    h1 { font-size: clamp(2.3rem, 6.5vw, 3.8rem); font-weight: 800; letter-spacing: -.035em; line-height: 1.05; color: #fff; margin-bottom: 1rem; }
+    h1 .grad { background: linear-gradient(90deg, #ffd2a8, var(--accent) 50%, var(--accent-2)); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shine 6s linear infinite; }
+    @keyframes shine { to { background-position: 200% center; } }
+    .tag { font-size: 1.15rem; color: var(--muted); margin-bottom: 1.6rem; max-width: 520px; }
+    .typed { color: #fff; font-family: var(--mono); border-right: 2px solid var(--accent); padding-right: 3px; animation: caret .8s steps(1) infinite; }
+    @keyframes caret { 50% { border-color: transparent; } }
+    .btns { display: flex; flex-wrap: wrap; gap: .7rem; }
+    .btn { display: inline-flex; align-items: center; gap: .4rem; padding: .65rem 1.3rem; border-radius: 10px; font-size: .9rem; font-weight: 600; border: 0; transition: transform .2s, box-shadow .2s, background .2s; }
+    .btn:hover { transform: translateY(-2px); text-decoration: none; }
+    .btn-p { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #070913; }
+    .btn-p:hover { box-shadow: 0 6px 24px var(--glow); }
+    .btn-s { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.15); color: #fff; }
+    .btn-s:hover { background: rgba(255,255,255,.12); border-color: rgba(255,157,92,.5); }
 
-    .planet-stage {
-      position: relative;
-      width: 260px; height: 260px;
-      margin: 0 auto 1.5rem;
-      display: flex; align-items: center; justify-content: center;
-    }
-
-    .jupiter-sphere {
-      width: 150px; height: 150px;
-      border-radius: 50%;
-      background: repeating-linear-gradient(
-        175deg,
-        #24140d 0px, #4a2818 10px, #c38b60 18px, #e0b48c 28px,
-        #995530 38px, #d8a478 48px, #361d12 58px, #a6643c 68px,
-        #edd3b6 78px, #783c22 88px, #c38b60 98px, #24140d 110px
-      );
-      background-size: 200% 200%;
-      animation: rotateBands 26s linear infinite;
-      box-shadow:
-        inset -28px -20px 48px rgba(0, 0, 0, 0.9),
-        inset 12px 12px 25px rgba(255, 205, 160, 0.4),
-        0 0 70px var(--accent-glow);
-      position: relative;
-      overflow: hidden;
-      z-index: 2;
-    }
-
-    .great-red-spot {
-      position: absolute;
-      bottom: 38px; right: 30px;
-      width: 32px; height: 20px;
-      background: radial-gradient(ellipse at center, #9e2a18 0%, #d45032 60%, rgba(158, 42, 24, 0) 100%);
-      border-radius: 50%;
-      transform: rotate(-10deg);
-      box-shadow: 0 0 10px rgba(212, 80, 50, 0.7);
-    }
-
-    /* Orbits with moons */
-    .orbit {
-      position: absolute;
-      border: 1px dashed rgba(255, 157, 92, 0.28);
-      border-radius: 50%;
-      animation: spin linear infinite;
-    }
-    .orbit::after {
-      content: "";
-      position: absolute;
-      top: -5px; left: 50%;
-      width: 10px; height: 10px;
-      margin-left: -5px;
-      border-radius: 50%;
-      background: var(--moon);
-      box-shadow: 0 0 12px var(--moon);
-    }
-    .o1 { width: 190px; height: 190px; animation-duration: 9s;  --moon: #ffd9a8; }
-    .o2 { width: 225px; height: 225px; animation-duration: 16s; --moon: #8ec5ff; animation-direction: reverse; }
-    .o3 { width: 260px; height: 260px; animation-duration: 28s; --moon: #ff8f8f; }
-
-    @keyframes rotateBands {
-      0%   { background-position: 0% 50%; }
-      50%  { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+    .planet-stage { position: relative; width: 300px; height: 300px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
+    .jupiter { width: 170px; height: 170px; border-radius: 50%; position: relative; overflow: hidden; z-index: 2;
+      background: repeating-linear-gradient(175deg, #24140d 0, #4a2818 10px, #c38b60 18px, #e0b48c 28px, #995530 38px, #d8a478 48px, #361d12 58px, #a6643c 68px, #edd3b6 78px, #783c22 88px, #c38b60 98px, #24140d 110px);
+      background-size: 200% 200%; animation: bands 26s linear infinite;
+      box-shadow: inset -30px -22px 52px rgba(0,0,0,.9), inset 13px 13px 28px rgba(255,205,160,.4), 0 0 80px var(--glow); }
+    .grs { position: absolute; bottom: 44px; right: 34px; width: 36px; height: 22px; border-radius: 50%; background: radial-gradient(ellipse, #9e2a18 0, #d45032 60%, rgba(158,42,24,0) 100%); transform: rotate(-10deg); box-shadow: 0 0 10px rgba(212,80,50,.7); }
+    @keyframes bands { 0%,100% { background-position: 0 50%; } 50% { background-position: 100% 50%; } }
+    .orbit { position: absolute; border: 1px dashed rgba(255,157,92,.28); border-radius: 50%; animation: spin linear infinite; }
+    .orbit::after { content: ""; position: absolute; top: -5px; left: 50%; width: 10px; height: 10px; margin-left: -5px; border-radius: 50%; background: var(--moon); box-shadow: 0 0 12px var(--moon); }
+    .o1 { width: 215px; height: 215px; animation-duration: 9s; --moon: #ffd9a8; }
+    .o2 { width: 255px; height: 255px; animation-duration: 16s; --moon: #8ec5ff; animation-direction: reverse; }
+    .o3 { width: 295px; height: 295px; animation-duration: 28s; --moon: #ff8f8f; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    .badge {
-      display: inline-block;
-      padding: 0.35rem 0.9rem;
-      border-radius: 9999px;
-      background: rgba(255, 157, 92, 0.12);
-      border: 1px solid rgba(255, 157, 92, 0.35);
-      color: var(--accent);
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      margin-bottom: 1rem;
-    }
-
-    h1 {
-      font-size: clamp(2rem, 5.5vw, 3rem);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      background: linear-gradient(90deg, #fff 0%, #ffd2a8 45%, var(--accent) 70%, var(--accent-2) 100%);
-      background-size: 200% auto;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      animation: shine 6s linear infinite;
-      margin-bottom: 0.6rem;
-    }
-    @keyframes shine { to { background-position: 200% center; } }
-
-    .punchline {
-      font-size: 1.15rem;
-      color: var(--muted);
-      margin: 0 auto 1.75rem;
-    }
-    .punchline b { color: #fff; font-weight: 600; }
-
-    .button-row {
-      display: flex; flex-wrap: wrap;
-      justify-content: center; gap: 0.8rem;
-    }
-
-    .btn {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      padding: 0.65rem 1.3rem;
-      border-radius: 10px;
-      font-size: 0.9rem; font-weight: 600;
-      text-decoration: none;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-    }
-    .btn:hover { transform: translateY(-2px); }
-    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #070913; }
-    .btn-primary:hover { box-shadow: 0 6px 24px var(--accent-glow); }
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #fff;
-    }
-    .btn-secondary:hover { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 157, 92, 0.5); }
-
-    /* ---------- Stats ---------- */
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 1rem;
-      margin-bottom: 1.25rem;
-    }
-    .stat {
-      text-align: center;
-      padding: 1.1rem 0.5rem;
-      border-radius: 14px;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      backdrop-filter: blur(10px);
-    }
-    .stat .num {
-      font-size: 2rem; font-weight: 800;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-    }
-    .stat .label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
-
-    /* ---------- Cards ---------- */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-      gap: 1.25rem;
-      margin-bottom: 3rem;
-    }
-
-    .card {
-      position: relative;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 1.5rem;
-      backdrop-filter: blur(10px);
-      overflow: hidden;
-      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-    }
-    .card::before {
-      content: "";
-      position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, transparent, var(--accent), var(--accent-2), transparent);
-      opacity: 0.7;
-    }
-    .card:hover {
-      transform: translateY(-5px);
-      border-color: rgba(255, 157, 92, 0.5);
-      box-shadow: 0 10px 40px rgba(255, 157, 92, 0.15);
-    }
-
-    .card h2 {
-      font-size: 1.1rem; color: #fff;
-      margin-bottom: 0.85rem;
-      display: flex; align-items: center; gap: 0.55rem;
-    }
-    .icon {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 34px; height: 34px;
-      border-radius: 10px;
-      background: rgba(255, 157, 92, 0.14);
-      border: 1px solid rgba(255, 157, 92, 0.3);
-      font-size: 1.05rem;
-    }
-
+    /* ---------- Cards / chips ---------- */
+    .card { position: relative; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 1.3rem; backdrop-filter: blur(10px); overflow: hidden; }
+    .card::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), var(--accent-2), transparent); opacity: .6; }
+    .chips { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .chip { font-size: .75rem; padding: .25rem .55rem; border-radius: 6px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); color: #cbd5e1; font-family: var(--mono); transition: all .2s; }
+    .chip:hover { color: #fff; border-color: var(--accent); background: rgba(255,157,92,.15); transform: translateY(-2px); }
+    .tagline { display: inline-block; font-size: .72rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; padding: .15rem .5rem; border-radius: 6px; background: rgba(74,222,128,.12); border: 1px solid rgba(74,222,128,.35); color: var(--green); }
     .list { list-style: none; }
-    .list li {
-      position: relative;
-      padding-left: 1.2rem;
-      font-size: 0.93rem;
-      color: var(--muted);
-      margin-bottom: 0.55rem;
-    }
-    .list li:last-child { margin-bottom: 0; }
-    .list li::before {
-      content: "";
-      position: absolute; left: 0; top: 0.55em;
-      width: 7px; height: 7px; border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 8px var(--accent-glow);
-    }
+    .list li { position: relative; padding-left: 1.1rem; font-size: .92rem; color: var(--muted); margin-bottom: .45rem; }
+    .list li::before { content: ""; position: absolute; left: 0; top: .6em; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--glow); }
     .list b { color: #fff; font-weight: 600; }
-    .card a { color: var(--accent); text-decoration: none; }
-    .card a:hover { text-decoration: underline; }
 
-    .chips { display: flex; flex-wrap: wrap; gap: 0.45rem; }
-    .chip {
-      font-size: 0.78rem;
-      padding: 0.28rem 0.6rem;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #cbd5e1;
-      font-family: ui-monospace, Consolas, monospace;
-      transition: all 0.2s ease;
+    /* ---------- Terminal (agent) ---------- */
+    .term { background: rgba(8, 10, 20, .88); border: 1px solid rgba(255,170,110,.25); border-radius: 14px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.45), 0 0 40px rgba(255,157,92,.08); }
+    .term-bar { display: flex; align-items: center; gap: .45rem; padding: .6rem .9rem; background: rgba(255,255,255,.04); border-bottom: 1px solid rgba(255,255,255,.07); }
+    .term-bar i { width: 11px; height: 11px; border-radius: 50%; background: #ff5f57; }
+    .term-bar i:nth-child(2) { background: #febc2e; } .term-bar i:nth-child(3) { background: #28c840; }
+    .term-bar span { margin-left: .6rem; font-family: var(--mono); font-size: .78rem; color: var(--muted); }
+    .term-body { padding: 1rem 1.1rem; font-family: var(--mono); font-size: .86rem; min-height: 300px; max-height: 480px; overflow-y: auto; }
+    .msg { margin-bottom: 1rem; }
+    .q { color: #fff; } .q::before { content: "❯ "; color: var(--accent); }
+    .trace { color: var(--muted); font-size: .8rem; padding-left: 1rem; border-left: 2px solid rgba(255,157,92,.3); margin: .5rem 0; }
+    .trace div { margin: .15rem 0; opacity: 0; animation: fade .3s forwards; }
+    .trace .k { color: var(--blue); } .trace .v { color: var(--green); } .trace .s { color: var(--accent); }
+    @keyframes fade { to { opacity: 1; } }
+    .ans { color: #e8edf5; font-family: -apple-system, "Segoe UI", Roboto, sans-serif; font-size: .95rem; line-height: 1.65; }
+    .ans sup { color: var(--accent); font-family: var(--mono); font-weight: 700; margin: 0 1px; }
+    .srcs { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .6rem; font-family: var(--mono); font-size: .72rem; }
+    .srcs span, .srcs button { background: rgba(255,157,92,.1); border: 1px solid rgba(255,157,92,.3); color: var(--accent); padding: .15rem .5rem; border-radius: 6px; }
+    .srcs button:hover { background: rgba(255,157,92,.25); }
+    .ask { display: flex; gap: .5rem; padding: .75rem; border-top: 1px solid rgba(255,255,255,.07); background: rgba(255,255,255,.02); }
+    .ask input { flex: 1; min-width: 0; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); border-radius: 8px; padding: .6rem .8rem; color: #fff; font-family: var(--mono); font-size: .88rem; outline: none; }
+    .ask input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(255,157,92,.15); }
+    .suggest { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+    .suggest button { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.14); border-radius: 9999px; padding: .35rem .85rem; font-size: .82rem; color: #cbd5e1; transition: all .2s; }
+    .suggest button:hover { border-color: var(--accent); color: #fff; background: rgba(255,157,92,.14); transform: translateY(-2px); }
+    .note { font-size: .78rem; color: #64748b; margin-top: .8rem; }
+
+    /* ---------- Orrery ---------- */
+    .orrery-grid { display: grid; grid-template-columns: minmax(300px, 540px) 1fr; gap: 1.5rem; align-items: center; }
+    .orrery { position: relative; width: 100%; aspect-ratio: 1; margin: 0 auto; }
+    .ring { position: absolute; left: 50%; top: 50%; border: 1px dashed rgba(255,157,92,.22); border-radius: 50%; transform: translate(-50%, -50%); }
+    .sun { position: absolute; left: 50%; top: 50%; width: 22%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; display: grid; place-items: center;
+      background: radial-gradient(circle, rgba(255,194,26,.35), rgba(255,157,92,.12) 60%, transparent 72%); box-shadow: 0 0 60px rgba(255,194,26,.25); }
+    .sun svg { width: 75%; height: 75%; }
+    .planet { position: absolute; width: 46px; height: 46px; transform: translate(-50%, -50%); border-radius: 50%; border: 0; display: grid; place-items: center; font-size: 1.3rem;
+      background: radial-gradient(circle at 30% 28%, var(--c1), var(--c2)); box-shadow: inset -6px -6px 12px rgba(0,0,0,.5), 0 0 16px var(--c2); transition: box-shadow .2s, scale .2s; }
+    .planet:hover, .planet:focus-visible { scale: 1.2; outline: none; z-index: 5; }
+    .planet.sel { box-shadow: inset -6px -6px 12px rgba(0,0,0,.5), 0 0 0 3px #fff, 0 0 26px var(--c1); z-index: 4; }
+    .planet::after { content: attr(data-name); position: absolute; top: 115%; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: .7rem; background: rgba(7,9,19,.92); border: 1px solid rgba(255,255,255,.15); padding: .15rem .5rem; border-radius: 6px; opacity: 0; pointer-events: none; transition: opacity .2s; }
+    .planet:hover::after, .planet.sel::after, .planet:focus-visible::after { opacity: 1; }
+    .detail h3 { color: #fff; font-size: 1.35rem; margin: .5rem 0 .75rem; }
+    .detail .chips { margin-top: 1rem; }
+    .detail .hint { font-size: .78rem; color: #64748b; margin-top: 1rem; }
+    .detail.swap { animation: swap .35s ease; }
+    @keyframes swap { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+    /* ---------- Blueprint ---------- */
+    .bp svg { width: 100%; height: auto; display: block; }
+    .bp .node rect { fill: rgba(255,157,92,.1); stroke: rgba(255,157,92,.5); stroke-width: 1.5; transition: all .2s; }
+    .bp .node text { fill: #fff; font-size: 14px; font-weight: 600; text-anchor: middle; dominant-baseline: middle; pointer-events: none; }
+    .bp .node small { font-size: 10px; }
+    .bp .node:hover rect, .bp .node:focus rect { fill: rgba(255,157,92,.28); stroke: #fff; filter: drop-shadow(0 0 8px var(--accent)); }
+    .bp .node { cursor: pointer; outline: none; }
+    .bp .core rect { fill: rgba(255,95,109,.16); stroke: var(--accent-2); }
+    .bp .store rect { fill: rgba(142,197,255,.1); stroke: rgba(142,197,255,.55); }
+    .bp .wire { fill: none; stroke: rgba(255,255,255,.18); stroke-width: 1.5; stroke-dasharray: 4 4; }
+    .bp .pkt { fill: var(--accent); filter: drop-shadow(0 0 5px var(--accent)); }
+    .bp .newapi { opacity: 0; transition: opacity .5s; pointer-events: none; }
+    .bp .newapi.on { opacity: 1; pointer-events: auto; }
+    .bp-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-top: .8rem; }
+    .caption { color: var(--muted); font-size: .92rem; min-height: 3em; flex: 1 1 320px; }
+    .caption b { color: #fff; }
+
+    /* ---------- Logbook ---------- */
+    .track { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; padding-top: 1.6rem; }
+    .track::before { content: ""; position: absolute; left: 0; right: 0; top: .55rem; height: 2px; background: linear-gradient(90deg, rgba(255,157,92,.1), var(--accent), var(--accent-2)); }
+    .stn { position: relative; }
+    .stn::before { content: ""; position: absolute; left: 0; top: -1.6rem; width: 14px; height: 14px; border-radius: 50%; background: var(--bg); border: 3px solid var(--accent); box-shadow: 0 0 10px var(--glow); }
+    .stn.now::before { background: var(--green); border-color: var(--green); box-shadow: 0 0 14px var(--green); }
+    .stn small { font-family: var(--mono); font-size: .74rem; color: var(--accent); }
+    .stn h4 { color: #fff; font-size: .98rem; margin: .1rem 0; }
+    .stn p { color: var(--muted); font-size: .85rem; }
+    .three { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+    .three h4 { color: #fff; margin-bottom: .7rem; font-size: 1rem; }
+    .belt { display: grid; gap: .65rem; }
+    .belt div > small { display: block; color: var(--muted); font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; margin-bottom: .25rem; }
+    .win { display: flex; align-items: center; gap: .6rem; margin-bottom: .6rem; font-size: .9rem; color: #cbd5e1; }
+    .win b { color: var(--green); font-family: var(--mono); min-width: 5.2rem; font-size: .8rem; }
+
+    /* ---------- CTA ---------- */
+    .cta { text-align: center; padding: 2.6rem 1.5rem; }
+    .cta h2 { font-size: 1.9rem; color: #fff; margin-bottom: .4rem; }
+    .cta p { color: var(--muted); margin-bottom: 1.4rem; }
+    .cta .btns { justify-content: center; }
+    footer { text-align: center; font-size: .82rem; color: #64748b; padding: 2.5rem 0; }
+
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+
+    @media (max-width: 800px) {
+      .hero { grid-template-columns: 1fr; text-align: center; padding-top: 6.5rem; }
+      .hero .tag { margin-inline: auto; } .hero .btns { justify-content: center; }
+      .planet-stage { order: -1; transform: scale(.8); margin-block: -20px; }
+      .orrery-grid { grid-template-columns: 1fr; }
+      .track { grid-template-columns: 1fr 1fr; row-gap: 2.2rem; }
+      .links a:not(.pill) { display: none; }
     }
-    .chip:hover {
-      color: #fff;
-      border-color: var(--accent);
-      background: rgba(255, 157, 92, 0.15);
-      transform: translateY(-2px);
-    }
-    .chips.mt { margin-top: 0.9rem; }
-
-    .wide { grid-column: 1 / -1; }
-
-    footer { text-align: center; font-size: 0.85rem; color: #64748b; }
-    footer a { color: var(--accent); text-decoration: none; }
-
-    /* Reveal on load */
-    .reveal { opacity: 0; transform: translateY(18px); animation: rise 0.7s ease forwards; }
-    @keyframes rise { to { opacity: 1; transform: none; } }
-
-    @media (prefers-reduced-motion: reduce) {
-      * { animation: none !important; }
-      .reveal { opacity: 1; transform: none; }
-    }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } .reveal { opacity: 1; transform: none; } }
   </style>
 </head>
-<body>
+<body id="top">
   <canvas id="starfield"></canvas>
 
-  <div class="container">
-    <div class="hero">
+  <!-- Shared bee icon -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <radialGradient id="bodyGrad" cx="40%" cy="30%" r="80%"><stop offset="0" stop-color="#ffe066"/><stop offset="1" stop-color="#f5a300"/></radialGradient>
+      <clipPath id="bodyClip"><ellipse cx="38" cy="38" rx="17" ry="13"/></clipPath>
+      <symbol id="bee-sym" viewBox="0 0 64 64">
+        <ellipse class="wing l" cx="32" cy="21" rx="7" ry="14" transform="rotate(-22 32 21)" fill="rgba(200,230,255,.55)" stroke="rgba(255,255,255,.8)" stroke-width="1"/>
+        <ellipse class="wing r" cx="43" cy="21" rx="7" ry="14" transform="rotate(22 43 21)" fill="rgba(200,230,255,.45)" stroke="rgba(255,255,255,.8)" stroke-width="1"/>
+        <ellipse cx="38" cy="38" rx="17" ry="13" fill="url(#bodyGrad)"/>
+        <g clip-path="url(#bodyClip)" fill="#1a1208"><rect x="31" y="22" width="5" height="32"/><rect x="41" y="22" width="5" height="32"/><rect x="51" y="22" width="5" height="32"/></g>
+        <path d="M55 38 L61 38 L55 41 Z" fill="#1a1208"/>
+        <circle cx="19" cy="38" r="9" fill="#1a1208"/>
+        <circle cx="16" cy="36" r="2.4" fill="#fff"/><circle cx="16.6" cy="36" r="1.1" fill="#1a1208"/>
+        <path d="M14 42 Q18 45 22 42" stroke="#ffc21a" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+        <path d="M16 30 Q12 22 8 20 M21 29 Q22 21 19 16" stroke="#1a1208" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+        <circle cx="8" cy="20" r="1.5" fill="#ffc21a"/><circle cx="19" cy="16" r="1.5" fill="#ffc21a"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <nav>
+    <div class="nav-in">
+      <a class="logo" href="#top" aria-label="KB home">KB<svg class="bee"><use href="#bee-sym"/></svg></a>
+      <div class="links">
+        <a href="#ask">Ask my agent</a>
+        <a href="#missions">Missions</a>
+        <a href="#blueprint">Blueprint</a>
+        <a href="#logbook">Logbook</a>
+        <a class="pill" href="https://drive.google.com/file/d/1QaqQh59BEgyxe_Md5RvHGS7F3AkaLMwB/view?usp=drivesdk" target="_blank">Resume</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="wrap">
+
+    <!-- Hero -->
+    <header class="hero">
+      <div>
+        <div class="badge"><span class="dot"></span>Open to opportunities</div>
+        <h1>Hi, I'm KB.<br>I build <span class="grad">AI that ships.</span></h1>
+        <p class="tag">Currently into <span class="typed" id="typed"></span></p>
+        <div class="btns">
+          <a class="btn btn-p" href="#ask">Ask my agent ↓</a>
+          <a class="btn btn-s" href="#missions">Explore my work</a>
+          <a class="btn btn-s" href="https://github.com/krishna0125" target="_blank">GitHub</a>
+          <a class="btn btn-s" href="https://www.linkedin.com/in/krishnabharathi-ravisankar-424a99155/" target="_blank">LinkedIn</a>
+        </div>
+      </div>
       <div class="planet-stage">
-        <div class="orbit o3"></div>
-        <div class="orbit o2"></div>
-        <div class="orbit o1"></div>
-        <div class="jupiter-sphere"><div class="great-red-spot"></div></div>
+        <div class="orbit o3"></div><div class="orbit o2"></div><div class="orbit o1"></div>
+        <div class="jupiter"><div class="grs"></div></div>
       </div>
+    </header>
 
-      <div class="badge">🪐 AI/ML Engineer</div>
-      <h1>Krishnabharathi Ravisankar</h1>
-      <p class="punchline">Statistician turned <b>GenAI engineer</b>. I build things that survive production.</p>
-
-      <div class="button-row">
-        <a href="https://github.com/krishna0125" class="btn btn-primary" target="_blank">GitHub</a>
-        <a href="https://www.linkedin.com/in/krishnabharathi-ravisankar-424a99155/" class="btn btn-secondary" target="_blank">LinkedIn</a>
-        <a href="https://drive.google.com/file/d/1QaqQh59BEgyxe_Md5RvHGS7F3AkaLMwB/view?usp=drivesdk" class="btn btn-secondary" target="_blank">Resume (PDF)</a>
+    <!-- Ask my agent -->
+    <section id="ask">
+      <div class="sec-head reveal">
+        <div class="eyebrow">01 · Try it</div>
+        <h2>Don't read my resume. Ask my agent.</h2>
+        <p>It runs in your browser. Search, rerank, and answer only from facts about me, with citations.</p>
       </div>
-    </div>
+      <div class="term reveal">
+        <div class="term-bar"><i></i><i></i><i></i><span>kb-agent — grounded in ground truth</span></div>
+        <div class="term-body" id="termBody"></div>
+        <form class="ask" id="askForm">
+          <input id="askInput" type="text" placeholder="Ask anything: projects, LLMs, education, contact…" autocomplete="off" aria-label="Ask the agent">
+          <button class="btn btn-p" type="submit">Ask</button>
+        </form>
+      </div>
+      <div class="suggest reveal" id="suggest"></div>
+      <p class="note">Tip: it only answers from verified facts about me. Off-topic questions get a polite no.</p>
+    </section>
 
-    <div class="stats reveal" style="animation-delay:.1s">
-      <div class="stat"><div class="num" data-to="5" data-suffix="+">0</div><div class="label">Years</div></div>
-      <div class="stat"><div class="num" data-to="80" data-suffix="%+">0</div><div class="label">Model accuracy</div></div>
-      <div class="stat"><div class="num" data-to="2" data-suffix="">0</div><div class="label">Degrees</div></div>
-      <div class="stat"><div class="num">EY</div><div class="label">GDS</div></div>
-    </div>
+    <!-- Missions -->
+    <section id="missions">
+      <div class="sec-head reveal">
+        <div class="eyebrow">02 · Missions</div>
+        <h2>My work, as a solar system.</h2>
+        <p>Click a planet. Hover to pause the orbit.</p>
+      </div>
+      <div class="orrery-grid reveal">
+        <div class="orrery" id="orrery">
+          <div class="ring" style="width:64%;height:64%"></div>
+          <div class="ring" style="width:112%;height:112%;width:calc(2*56%);height:calc(2*56%)"></div>
+          <div class="ring" style="width:160%;height:160%"></div>
+          <div class="sun"><svg><use href="#bee-sym"/></svg></div>
+        </div>
+        <div class="card detail" id="detail"></div>
+      </div>
+    </section>
 
-    <div class="grid">
-      <div class="card reveal" style="animation-delay:.2s">
-        <h2><span class="icon">🔭</span>About</h2>
-        <ul class="list">
-          <li>Started in <b>statistics</b>, now building <b>GenAI</b>.</li>
-          <li>5+ years shipping enterprise AI agents.</li>
-          <li>Curious. Low ego.</li>
-        </ul>
-        <div class="chips mt">
-          <span class="chip">B.Sc. Stats · MCC</span>
-          <span class="chip">M.Sc. Big Data · St. Joseph's</span>
+    <!-- Blueprint -->
+    <section id="blueprint">
+      <div class="sec-head reveal">
+        <div class="eyebrow">03 · Blueprint</div>
+        <h2>How one of my agents works.</h2>
+        <p>The PO Analyser platform. Hover any block.</p>
+      </div>
+      <div class="card bp reveal">
+        <svg viewBox="0 0 900 400" role="img" aria-label="Agent architecture diagram">
+          <path id="p1" class="wire" d="M130,198 L190,198"/>
+          <path id="p2" class="wire" d="M320,198 L380,198"/>
+          <path id="p3" class="wire" d="M255,96 L255,170"/>
+          <path id="p4" class="wire" d="M530,198 L590,198"/>
+          <path id="p5" class="wire" d="M720,198 C750,198 750,84 780,84"/>
+          <path id="p6" class="wire" d="M720,200 L780,200"/>
+          <path id="p7" class="wire" d="M720,202 C750,202 750,314 780,314"/>
+          <path id="p8" class="wire" d="M455,246 L455,300"/>
+          <path id="p9" class="wire newapi" d="M655,226 L655,310"/>
+
+          <g class="node" tabindex="0" data-cap="<b>User.</b> Asks in plain language. No forms, no menus.">
+            <rect x="20" y="170" width="110" height="56" rx="12"/><text x="75" y="198">User</text></g>
+          <g class="node" tabindex="0" data-cap="<b>Intent Router.</b> Decides whether this is a question, an action, or a rule change.">
+            <rect x="190" y="170" width="130" height="56" rx="12"/><text x="255" y="198">Intent Router</text></g>
+          <g class="node store" tabindex="0" data-cap="<b>Prompt &amp; Rules.</b> Change prompts and business rules at runtime by chatting. No redeploy.">
+            <rect x="190" y="40" width="130" height="56" rx="12"/><text x="255" y="68">Prompts &amp; Rules</text></g>
+          <g class="node core" tabindex="0" data-cap="<b>LangGraph Agent.</b> Plans, picks tools dynamically, keeps context across turns. Served with FastAPI.">
+            <rect x="380" y="150" width="150" height="96" rx="14"/><text x="455" y="190">LangGraph</text><text x="455" y="210">Agent</text></g>
+          <g class="node store" tabindex="0" data-cap="<b>Memory.</b> Personal memory per user, plus a global layer managed with RBAC and dashboards.">
+            <rect x="380" y="300" width="150" height="56" rx="12"/><text x="455" y="328">Agent Memory</text></g>
+          <g class="node" tabindex="0" data-cap="<b>Connector Registry.</b> Add a new API integration as config. Self-service, no code deploy.">
+            <rect x="590" y="170" width="130" height="56" rx="12"/><text x="655" y="198">Connector Registry</text></g>
+          <g class="node store" tabindex="0" data-cap="<b>SQL.</b> Query business data directly.">
+            <rect x="780" y="60" width="100" height="48" rx="12"/><text x="830" y="84">SQL</text></g>
+          <g class="node store" tabindex="0" data-cap="<b>Blob Storage.</b> Read documents and files.">
+            <rect x="780" y="176" width="100" height="48" rx="12"/><text x="830" y="200">Blob</text></g>
+          <g class="node store" tabindex="0" data-cap="<b>HTTP APIs.</b> Call any external service through a connector.">
+            <rect x="780" y="290" width="100" height="48" rx="12"/><text x="830" y="314">HTTP APIs</text></g>
+          <g class="node store newapi" id="newNode" tabindex="0" data-cap="<b>New API.</b> Just registered. Live without a deployment.">
+            <rect x="590" y="310" width="130" height="48" rx="12"/><text x="655" y="334">+ Your new API</text></g>
+
+          <g id="packets">
+            <circle class="pkt" r="4"><animateMotion dur="1.6s" repeatCount="indefinite"><mpath href="#p1"/></animateMotion></circle>
+            <circle class="pkt" r="4"><animateMotion dur="1.6s" begin=".5s" repeatCount="indefinite"><mpath href="#p2"/></animateMotion></circle>
+            <circle class="pkt" r="4"><animateMotion dur="2s" repeatCount="indefinite"><mpath href="#p3"/></animateMotion></circle>
+            <circle class="pkt" r="4"><animateMotion dur="1.6s" begin="1s" repeatCount="indefinite"><mpath href="#p4"/></animateMotion></circle>
+            <circle class="pkt" r="4"><animateMotion dur="1.8s" begin="1.4s" repeatCount="indefinite"><mpath href="#p5"/></animateMotion></circle>
+            <circle class="pkt" r="4"><animateMotion dur="1.8s" begin="1.6s" repeatCount="indefinite"><mpath href="#p6"/></animateMotion></circle>
+            <circle class="pkt" r="4"><animateMotion dur="1.8s" begin="1.8s" repeatCount="indefinite"><mpath href="#p7"/></animateMotion></circle>
+            <circle class="pkt" r="4"><animateMotion dur="1.4s" begin=".8s" repeatCount="indefinite"><mpath href="#p8"/></animateMotion></circle>
+            <circle class="pkt newapi" id="newPkt" r="4"><animateMotion dur="1.4s" repeatCount="indefinite"><mpath href="#p9"/></animateMotion></circle>
+          </g>
+        </svg>
+        <div class="bp-foot">
+          <div class="caption" id="caption">Hover a block to see what it does.</div>
+          <button class="btn btn-p" id="plug" type="button">⚡ Plug in a new API</button>
         </div>
       </div>
+    </section>
 
-      <div class="card reveal" style="animation-delay:.3s">
-        <h2><span class="icon">🛰️</span>What I Ship</h2>
-        <ul class="list">
-          <li><b>Agents:</b> multi-agent platforms with LangGraph and FastAPI.</li>
-          <li><b>Domain LLMs:</b> fine-tuned Llama / RedPajama with RL, 80%+ accuracy.</li>
-          <li><b>OSS:</b> <a href="https://github.com/krishna0125/RFR" target="_blank">RiskCopilot</a> for Snowflake CoCo CLI, and <a href="https://deepeval.com/" target="_blank">DeepEval</a> contributions.</li>
-        </ul>
+    <!-- Logbook -->
+    <section id="logbook">
+      <div class="sec-head reveal">
+        <div class="eyebrow">04 · Logbook</div>
+        <h2>The flight path so far.</h2>
+        <p>From statistics to GenAI agents.</p>
+      </div>
+      <div class="track reveal">
+        <div class="stn"><small>2019</small><h4>Spectral Insights</h4><p>Data Science Intern. Image segmentation and Shiny dashboards.</p></div>
+        <div class="stn"><small>2019 – 20</small><h4>TCS</h4><p>Data Science Intern. Predictive asset dashboard.</p></div>
+        <div class="stn"><small>2020 – 21</small><h4>Federal Bank</h4><p>Analytics Officer. Loan pricing models.</p></div>
+        <div class="stn now"><small>2021 – now</small><h4>EY GDS</h4><p>ML/AI Engineer. Agents, RAG, LLMs.</p></div>
       </div>
 
-      <div class="card reveal" style="animation-delay:.4s">
-        <h2><span class="icon">🧰</span>Tech Stack</h2>
-        <div class="chips">
-          <span class="chip">Python</span>
-          <span class="chip">LangGraph</span>
-          <span class="chip">FastAPI</span>
-          <span class="chip">Azure AI Search</span>
-          <span class="chip">PyTorch</span>
-          <span class="chip">Redis</span>
-          <span class="chip">Docker</span>
-          <span class="chip">Linux GPUs</span>
+      <div class="three">
+        <div class="card reveal">
+          <h4>🧰 Toolbelt</h4>
+          <div class="belt">
+            <div><small>AI</small><div class="chips"><span class="chip">Python</span><span class="chip">LangGraph</span><span class="chip">LangChain</span><span class="chip">MS Agentic Framework</span><span class="chip">PyTorch</span><span class="chip">Scikit-learn</span><span class="chip">MCP</span></div></div>
+            <div><small>Backend</small><div class="chips"><span class="chip">FastAPI</span><span class="chip">Flask</span><span class="chip">Streamlit</span><span class="chip">Dash</span><span class="chip">R Shiny</span><span class="chip">SQL</span><span class="chip">MongoDB</span></div></div>
+            <div><small>Azure</small><div class="chips"><span class="chip">AI Search</span><span class="chip">AI Foundry</span><span class="chip">Memory Store</span><span class="chip">Redis</span><span class="chip">Functions</span><span class="chip">Doc Intelligence</span></div></div>
+            <div><small>Ops</small><div class="chips"><span class="chip">Docker</span><span class="chip">Git Actions</span><span class="chip">Linux GPU</span><span class="chip">Shell</span></div></div>
+          </div>
+        </div>
+        <div class="card reveal">
+          <h4>🏆 Hackathons</h4>
+          <div class="win"><b>95%</b>Urban Heat Island prediction (EY)</div>
+          <div class="win"><b>Semi-final</b>Frog Discovery Tool (EY)</div>
+          <div class="win"><b>Top 13%</b>Loan demand forecasting (LTFS · Analytics Vidhya)</div>
+          <div class="win"><b>Built</b><a href="https://github.com/krishna0125/RFR" target="_blank">RiskCopilot</a> for Snowflake CoCo CLI</div>
+        </div>
+        <div class="card reveal">
+          <h4>🎓 Education</h4>
+          <div class="win"><b>M.Sc.</b>Big Data Analytics · St. Joseph's College</div>
+          <div class="win"><b>B.Sc.</b>Statistics · Madras Christian College</div>
+          <h4 style="margin-top:1rem">🌍 Open source</h4>
+          <div class="win"><b>Contributor</b><a href="https://deepeval.com/" target="_blank">DeepEval</a></div>
         </div>
       </div>
+    </section>
 
-      <div class="card reveal" style="animation-delay:.5s">
-        <h2><span class="icon">💛</span>Beyond Code</h2>
-        <ul class="list">
-          <li>Mentoring with patience.</li>
-          <li>Kind code reviews.</li>
-          <li>Leave teams calmer than I found them.</li>
-        </ul>
+    <!-- Contact -->
+    <section id="contact">
+      <div class="card cta reveal">
+        <h2>Got an agent that needs to survive production?</h2>
+        <p>Let's talk.</p>
+        <div class="btns">
+          <a class="btn btn-p" href="mailto:krishaug97@gmail.com">krishaug97@gmail.com</a>
+          <a class="btn btn-s" href="https://www.linkedin.com/in/krishnabharathi-ravisankar-424a99155/" target="_blank">LinkedIn</a>
+          <a class="btn btn-s" href="https://github.com/krishna0125" target="_blank">GitHub</a>
+          <a class="btn btn-s" href="https://drive.google.com/file/d/1QaqQh59BEgyxe_Md5RvHGS7F3AkaLMwB/view?usp=drivesdk" target="_blank">Resume (PDF)</a>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <footer>
-      Built with stardust, HTML/CSS &amp; git · <a href="mailto:krishaug97@gmail.com">krishaug97@gmail.com</a>
-    </footer>
+    <footer>Built with stardust, HTML/CSS &amp; a little bee 🐝</footer>
   </div>
 
   <script>
-    const canvas = document.getElementById('starfield');
-    const ctx = canvas.getContext('2d');
-    let stars = [];
-    let comets = [];
-
+  (() => {
+    /* ================= Starfield + comets ================= */
+    const canvas = document.getElementById('starfield'), ctx = canvas.getContext('2d');
+    let stars = [], comets = [];
     function resize() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      stars = Array.from({ length: 160 }, () => ({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        size: Math.random() * 1.6 + 0.4,
-        alpha: Math.random() * 0.7 + 0.2,
-        speed: Math.random() * 0.015 + 0.005
-      }));
+      canvas.width = innerWidth; canvas.height = innerHeight;
+      stars = Array.from({ length: 160 }, () => ({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, size: Math.random() * 1.6 + .4, alpha: Math.random() * .7 + .2, speed: Math.random() * .015 + .005 }));
     }
-
-    function spawnComet() {
-      comets.push({
-        x: Math.random() * canvas.width * 0.8 + canvas.width * 0.2,
-        y: -10,
-        vx: -(Math.random() * 4 + 5),
-        vy: Math.random() * 3 + 4,
-        life: 1
-      });
-    }
-    setInterval(() => { if (comets.length < 2) spawnComet(); }, 3500);
-
-    function animate() {
+    setInterval(() => { if (comets.length < 2) comets.push({ x: Math.random() * canvas.width * .8 + canvas.width * .2, y: -10, vx: -(Math.random() * 4 + 5), vy: Math.random() * 3 + 4, life: 1 }); }, 3500);
+    (function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      stars.forEach(s => {
-        s.alpha += s.speed;
-        if (s.alpha > 0.95 || s.alpha < 0.2) s.speed = -s.speed;
-        ctx.fillStyle = `rgba(255, 255, 255, ${Math.abs(s.alpha)})`;
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
-        ctx.fill();
-      });
-
+      stars.forEach(s => { s.alpha += s.speed; if (s.alpha > .95 || s.alpha < .2) s.speed = -s.speed; ctx.fillStyle = `rgba(255,255,255,${Math.abs(s.alpha)})`; ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, 6.283); ctx.fill(); });
       comets = comets.filter(c => c.life > 0 && c.y < canvas.height + 50);
-      comets.forEach(c => {
-        const g = ctx.createLinearGradient(c.x, c.y, c.x - c.vx * 10, c.y - c.vy * 10);
-        g.addColorStop(0, `rgba(255, 200, 150, ${c.life})`);
-        g.addColorStop(1, 'rgba(255, 200, 150, 0)');
-        ctx.strokeStyle = g;
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(c.x, c.y);
-        ctx.lineTo(c.x - c.vx * 10, c.y - c.vy * 10);
-        ctx.stroke();
-        c.x += c.vx; c.y += c.vy; c.life -= 0.004;
-      });
+      comets.forEach(c => { const g = ctx.createLinearGradient(c.x, c.y, c.x - c.vx * 10, c.y - c.vy * 10); g.addColorStop(0, `rgba(255,200,150,${c.life})`); g.addColorStop(1, 'rgba(255,200,150,0)'); ctx.strokeStyle = g; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(c.x, c.y); ctx.lineTo(c.x - c.vx * 10, c.y - c.vy * 10); ctx.stroke(); c.x += c.vx; c.y += c.vy; c.life -= .004; });
+      requestAnimationFrame(draw);
+    })();
+    addEventListener('resize', resize); resize();
 
-      requestAnimationFrame(animate);
+    /* ================= Typewriter ================= */
+    const words = ['enterprise AI agents', 'graph RAG', 'domain LLMs', 'agent memory', 'things that ship'];
+    const typed = document.getElementById('typed');
+    let wi = 0, ci = 0, del = false;
+    (function type() {
+      const w = words[wi];
+      typed.textContent = w.slice(0, ci);
+      if (!del && ci === w.length) { del = true; return setTimeout(type, 1400); }
+      if (del && ci === 0) { del = false; wi = (wi + 1) % words.length; }
+      ci += del ? -1 : 1;
+      setTimeout(type, del ? 35 : 70);
+    })();
+
+    /* ================= Reveal ================= */
+    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    const links = [...document.querySelectorAll('.links a:not(.pill)')];
+    const spy = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id)); }), { rootMargin: '-40% 0px -55% 0px' });
+    document.querySelectorAll('section[id]').forEach(s => spy.observe(s));
+
+    /* ================= Agent: knowledge base ================= */
+    const KB = [
+      { id: 'ey', cat: 'experience', title: 'EY GDS · ML/AI Engineer', tags: 'experience job work company role ey gds employer current years', say: 'He has been an ML/AI Engineer at EY GDS for 4.8 years (12/2021 to 08/2026), building enterprise agent platforms, graph RAG, agent memory and domain LLMs.' },
+      { id: 'po', cat: 'projects', planet: 'po', title: 'PO Analyser Agent', tags: 'agent agents langgraph fastapi tools connectors intent routing prompt platform enterprise registry', say: 'He led an enterprise agent platform on LangGraph + FastAPI with dynamic tool management, SQL, Blob and HTTP connectors, memory and prompt management. Intent routing lets teams change prompts and business rules by chatting, and a connector registry adds API integrations with no code deploy.' },
+      { id: 'mem', cat: 'projects', planet: 'mem', title: 'Agent Memory', tags: 'memory personal global rbac dashboard cognee memori azure store agents', say: 'He designed personal and global memory for agents on EY platforms, compared Cognee, MemOri and Azure AI Memory Store, and built an RBAC app with dashboards to manage the global memory layer.' },
+      { id: 'graph', cat: 'projects', planet: 'graph', title: 'Eco-System Hub (Graph RAG)', tags: 'graph rag retrieval rerank citations entrepreneur people company event hybrid cross-encoder knowledge', say: 'He built a graph RAG for the EY Entrepreneur of the Year platform. Users ask in plain English about people, companies and events, with hybrid retrieval, cross-encoder rerank and cited answers from ground truth.' },
+      { id: 'llm', cat: 'projects', planet: 'llm', title: 'Domain LLMs + RL', tags: 'llm llms fine-tune finetune fine-tuning train training reinforcement rl llama open-llama redpajama red pajama model gpu accuracy', say: 'He trained domain-specific LLMs with reinforcement learning, fine-tuning Open-Llama, RedPajama and Llama-2 to 80% accuracy on a custom dataset, and configured Linux GPU kernels for large-scale testing.' },
+      { id: 'risk', cat: 'projects', planet: 'risk', title: 'Risk & Document Review', tags: 'risk control compliance document review genai regulatory', say: 'He built and deployed a GenAI solution that reviews documents against firm risk and control rules, cross-referencing them with controls for faster, more accurate risk evaluation.' },
+      { id: 'search', cat: 'projects', planet: 'search', title: 'Search & Retrieval', tags: 'search hybrid filter key-phrase parallel azure ai search chatbot knowledge retrieval', say: 'He built key-phrase mapping with parallel execution, a hybrid search module with domain and country filters, and an Azure AI Search chatbot for internal knowledge.' },
+      { id: 'route', cat: 'projects', planet: 'route', title: 'Fine-tuning & Question Routing', tags: 'openai fine-tune cluster k-means kmeans vector routing chunking prompting question skill', say: 'He fine-tuned OpenAI models, tested chunking and in-context prompting, and built a K-Means plus vector search cluster model that routes questions to the right skill.' },
+      { id: 'oss', cat: 'projects', planet: 'oss', title: 'Open source & RiskCopilot', tags: 'open source oss riskcopilot rfr snowflake coco cli deepeval contribution github', say: 'He built RiskCopilot (RFR) for the Snowflake CoCo CLI hackathon and contributes to DeepEval.' },
+      { id: 'mentor', cat: 'people', title: 'Mentoring', tags: 'mentor mentoring team people junior review lead leadership collaborate culture', say: 'He mentored a junior engineer on building a Conversation Manager, and cares about patient mentoring and kind code reviews.' },
+      { id: 'fed', cat: 'experience', title: 'Federal Bank · Analytics Officer', tags: 'federal bank loan pricing ensemble propensity analytics officer personal loan risk-based', say: 'At Federal Bank (09/2020 to 12/2021) he built ensemble models with risk-based pricing and propensity prediction for dynamic Personal Loan pricing, and ran the monthly base refresh and insight reports.' },
+      { id: 'tcs', cat: 'experience', title: 'TCS · Data Science Intern', tags: 'tcs tata consultancy intern dash dashboard anomaly asset predictive classification', say: 'At TCS (12/2019 to 04/2020) he built a Predictive Asset Management dashboard in Dash with anomaly detection, association rules and classification models.' },
+      { id: 'spectral', cat: 'experience', title: 'Spectral Insights · Data Science Intern', tags: 'spectral insights intern flask image segmentation shiny pathology vulcan clinical time series', say: 'At Spectral Insights (04/2019 to 09/2019) he built a Flask image-segmentation app for clinical trial slides and a Shiny dashboard monitoring the Vulcan Digital Pathology System.' },
+      { id: 'edu', cat: 'education', title: 'Education', tags: 'education degree school college study studied university msc bsc statistics big data graduate qualification', say: 'He holds an M.Sc. in Big Data Analytics from St. Joseph\'s College, Bangalore (2018 to 2020) and a B.Sc. in Statistics from Madras Christian College, Chennai (2015 to 2018).' },
+      { id: 'hack', cat: 'hackathons', title: 'Hackathons', tags: 'hackathon hackathons competition award win rank kaggle uhi urban heat island frog ltfs analytics vidhya forecasting', say: 'He reached 95% accuracy predicting the EY Urban Heat Island index, was a semi-finalist in the EY Frog Discovery Tool challenge, and ranked in the top 13 percentile of the LTFS Loan Application Demand Forecasting contest on Analytics Vidhya.' },
+      { id: 'stack', cat: 'skills', title: 'AI & backend stack', tags: 'skills stack tech technology tools language languages python r langchain langgraph fastapi flask streamlit pytorch scikit pandas sql nosql mcp programming', say: 'His core stack is Python, R, LangGraph, LangChain, Microsoft Agentic Framework, FastAPI, Flask, Streamlit, Dash, R Shiny, PyTorch, Scikit-learn, Pandas, SQL and NoSQL.' },
+      { id: 'cloud', cat: 'skills', title: 'Azure & engineering', tags: 'azure cloud devops docker git github actions mongodb redis shell linux gpu blob function foundry document intelligence deploy infrastructure', say: 'On Azure he uses AI Search, AI Foundry, Memory Store, Redis, Blob Storage, Web Apps, Function Apps and Document Intelligence, along with Docker, Git Actions, MCP servers, MongoDB and Linux GPU machines.' },
+      { id: 'story', cat: 'about', title: 'Background', tags: 'background story journey about who statistician statistics origin start career path', say: 'He is a statistician by roots: a B.Sc. in Statistics, then an M.Sc. in Big Data Analytics, then 6+ years moving from risk models to GenAI agents.' },
+      { id: 'pitch', cat: 'pitch', title: 'Why hire KB', tags: 'hire why pitch strengths fit good best value reason choose strength impact recruit', say: 'He ships AI to production: agents, RAG and fine-tuned LLMs at EY scale, backed by a statistics foundation and 6+ years of experience. He also mentors, reviews kindly, and stays curious.' },
+      { id: 'avail', cat: 'contact', title: 'Availability', tags: 'available availability open opportunities looking notice joining hiring job change', say: 'He is open to new opportunities.' },
+      { id: 'contact', cat: 'contact', title: 'Contact', tags: 'contact email reach linkedin github resume cv phone message talk connect', say: 'You can reach him at krishaug97@gmail.com, or on LinkedIn and GitHub. The resume PDF is linked at the top of this page.' }
+    ];
+
+    /* ================= Agent: retrieval ================= */
+    const STOP = new Set('a an the is are was were of to in on for and or with what which who how did do does you your kb his he me my i about tell can has have been at it this that from by as be any please give show'.split(' '));
+    const stem = w => (w.length > 4 ? w.replace(/(ing|ed|es|s)$/, '') : w);
+    const toks = s => s.toLowerCase().replace(/[^a-z0-9\-\s]/g, ' ').split(/\s+/).filter(w => w && !STOP.has(w)).map(stem);
+    const SYN = { built: ['project'], build: ['project'], made: ['project'], create: ['project'], shipped: ['project'], work: ['experience', 'project'], worked: ['experience'], employer: ['company'], school: ['education'], college: ['education'], study: ['education'], degree: ['education'], hire: ['pitch'], strength: ['pitch'], reach: ['contact'], email: ['contact'], available: ['open'], tech: ['stack'], tool: ['stack'], language: ['stack'], award: ['hackathon'], win: ['hackathon'], compete: ['hackathon'], rag: ['retrieval', 'graph'], memory: ['memory'], finetune: ['fine-tune'], llm: ['llms'], mentor: ['mentoring'], lead: ['mentoring'] };
+    const SYN_S = Object.fromEntries(Object.entries(SYN).map(([k, v]) => [stem(k), v.map(stem)]));
+    const expand = q => { const out = new Set(q); q.forEach(t => (SYN_S[t] || []).forEach(x => out.add(x))); return [...out]; };
+
+    const docs = KB.map(d => ({ d, t: [...toks(d.title), ...toks(d.title), ...toks(d.tags), ...toks(d.tags), ...toks(d.say)] }));
+    const N = docs.length, avgLen = docs.reduce((a, x) => a + x.t.length, 0) / N;
+    const df = {}; docs.forEach(x => new Set(x.t).forEach(t => (df[t] = (df[t] || 0) + 1)));
+    function bm25(q) {
+      return docs.map(x => {
+        const tf = {}; x.t.forEach(t => (tf[t] = (tf[t] || 0) + 1));
+        let s = 0;
+        q.forEach(t => { if (!tf[t]) return; const idf = Math.log(1 + (N - df[t] + .5) / (df[t] + .5)); s += idf * (tf[t] * 2.5) / (tf[t] + 1.5 * (.25 + .75 * x.t.length / avgLen)); });
+        return { d: x.d, score: s, set: new Set(x.t) };
+      }).filter(r => r.score > 0).sort((a, b) => b.score - a.score);
     }
 
-    window.addEventListener('resize', resize);
-    resize();
-    animate();
+    /* ================= Agent: UI ================= */
+    const body = document.getElementById('termBody'), form = document.getElementById('askForm'), input = document.getElementById('askInput');
+    const SUGGEST = ['Why should we hire KB?', 'What has he built?', 'Tell me about the memory work', 'Which LLMs did he fine-tune?', 'What did he study?', 'How do I contact him?'];
+    const sugg = document.getElementById('suggest');
+    SUGGEST.forEach(s => { const b = document.createElement('button'); b.type = 'button'; b.textContent = s; b.onclick = () => ask(s); sugg.appendChild(b); });
 
-    // Count-up stats
-    document.querySelectorAll('.num[data-to]').forEach(el => {
-      const to = +el.dataset.to, suffix = el.dataset.suffix || '';
-      const start = performance.now(), dur = 1400;
-      (function tick(now) {
-        const p = Math.min((now - start) / dur, 1);
-        el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3))) + (p === 1 ? suffix : '');
-        if (p < 1) requestAnimationFrame(tick);
-      })(start);
+    const wait = ms => new Promise(r => setTimeout(r, ms));
+    let busy = false;
+    const esc = s => s.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+
+    async function ask(question) {
+      question = question.trim(); if (!question || busy) return;
+      busy = true; input.value = '';
+      const msg = document.createElement('div'); msg.className = 'msg';
+      msg.innerHTML = `<div class="q">${esc(question)}</div><div class="trace"></div><div class="ans"></div><div class="srcs"></div>`;
+      body.appendChild(msg);
+      const trace = msg.querySelector('.trace'), ans = msg.querySelector('.ans'), srcs = msg.querySelector('.srcs');
+      const log = html => { const el = document.createElement('div'); el.innerHTML = html; trace.appendChild(el); body.scrollTop = body.scrollHeight; };
+
+      const q = expand(toks(question));
+      await wait(250);
+      const ranked = bm25(q);
+      const top = ranked.slice(0, 5);
+
+      log(`<span class="k">[parse]</span> terms = <span class="v">${q.length ? q.join(', ') : '—'}</span>`);
+      await wait(350);
+      log(`<span class="k">[retrieve]</span> BM25 over ${N} verified chunks → <span class="v">${top.length}</span> candidates`);
+      await wait(350);
+
+      if (!top.length || top[0].score < 1.2) {
+        log(`<span class="k">[guard]</span> best score <span class="s">${top.length ? top[0].score.toFixed(2) : '0.00'}</span> below threshold, no grounded answer`);
+        await wait(300);
+        ans.textContent = "I only answer from verified facts about KB: his work, projects, skills, education and contact. Try one of the suggestions below.";
+        busy = false; body.scrollTop = body.scrollHeight; return;
+      }
+
+      const uq = [...new Set(q)];
+      const reranked = top.map(r => ({ ...r, final: r.score + 2 * (uq.filter(t => r.set.has(t)).length / uq.length) })).sort((a, b) => b.final - a.final);
+      const keep = reranked.filter(r => r.final >= reranked[0].final * .55).slice(0, 3);
+      log(`<span class="k">[rerank]</span> coverage boost → keep <span class="v">${keep.map((r, i) => `[${i + 1}] ${r.d.id} (${r.final.toFixed(2)})`).join('  ')}</span>`);
+      await wait(350);
+      log(`<span class="k">[intent]</span> <span class="v">${keep[0].d.cat}</span>`);
+      await wait(300);
+      log(`<span class="k">[generate]</span> constrained to ${keep.length} source${keep.length > 1 ? 's' : ''}, citations on`);
+      await wait(300);
+
+      const parts = keep.map((r, i) => ({ text: r.d.say, n: i + 1 }));
+      for (const p of parts) {
+        const words = p.text.split(' ');
+        for (const w of words) { ans.insertAdjacentText('beforeend', w + ' '); body.scrollTop = body.scrollHeight; await wait(18); }
+        ans.insertAdjacentHTML('beforeend', `<sup>[${p.n}]</sup> `);
+      }
+      keep.forEach((r, i) => {
+        if (r.d.planet) {
+          const b = document.createElement('button'); b.type = 'button'; b.textContent = `[${i + 1}] ${r.d.title} ↗`;
+          b.onclick = () => { selectPlanet(r.d.planet); document.getElementById('missions').scrollIntoView(); };
+          srcs.appendChild(b);
+        } else { const s = document.createElement('span'); s.textContent = `[${i + 1}] ${r.d.title}`; srcs.appendChild(s); }
+      });
+      body.scrollTop = body.scrollHeight; busy = false;
+    }
+    form.addEventListener('submit', e => { e.preventDefault(); ask(input.value); });
+
+    let demoed = false;
+    new IntersectionObserver((es, o) => es.forEach(e => { if (e.isIntersecting && !demoed) { demoed = true; o.disconnect(); ask('Why should we hire KB?'); } }), { threshold: .4 }).observe(document.getElementById('termBody'));
+
+    /* ================= Orrery ================= */
+    const PLANETS = [
+      { id: 'po', n: 'PO Analyser Agent', e: '🤖', ring: 0, a: 0.4, c: ['#ffd9a8', '#ff7a45'], tag: 'Enterprise agents', pts: ['Agent platform on <b>LangGraph + FastAPI</b> with dynamic tool management.', 'Connectors for <b>SQL, Blob Storage and HTTP APIs</b>.', '<b>Intent routing</b>: change prompts and business rules by chatting.', '<b>Connector registry</b>: new API integrations with no code deploy.'], chips: ['LangGraph', 'FastAPI', 'Tools', 'Memory'] },
+      { id: 'mem', n: 'Agent Memory', e: '🧠', ring: 0, a: 3.5, c: ['#d6c4ff', '#7c5cff'], tag: 'Personal + global memory', pts: ['Designed <b>personal and global memory</b> for agents on EY platforms.', 'Compared <b>Cognee, MemOri and Azure AI Memory Store</b>.', 'Built an app with <b>RBAC</b> and dashboards to manage global memory.'], chips: ['Cognee', 'MemOri', 'Azure AI Memory Store', 'RBAC'] },
+      { id: 'graph', n: 'Eco-System Hub', e: '🕸️', ring: 1, a: 1.0, c: ['#b8f5d4', '#1fb877'], tag: 'Graph RAG', pts: ['For the <b>EY Entrepreneur of the Year</b> platform.', 'Ask in plain English across people, company and event links.', 'Hybrid retrieval, <b>cross-encoder rerank</b>, constrained generation with <b>citations</b>.'], chips: ['Graph RAG', 'Rerank', 'Citations'] },
+      { id: 'llm', n: 'Domain LLMs + RL', e: '🔥', ring: 1, a: 3.0, c: ['#ffc2b0', '#e8442a'], tag: '80% accuracy', pts: ['Fine-tuned <b>Open-Llama, RedPajama, Llama-2</b> with reinforcement learning.', 'Reached <b>80% accuracy</b> on a custom dataset.', 'Configured Linux GPU kernels for large-scale model testing.'], chips: ['RL', 'Llama-2', 'PyTorch', 'Linux GPU'] },
+      { id: 'risk', n: 'Risk & Document Review', e: '⚖️', ring: 1, a: 5.0, c: ['#bfe3ff', '#2f7de1'], tag: 'GenAI compliance', pts: ['GenAI that reviews documents against firm <b>risk and control</b> rules.', 'Cross-references documents with controls for faster, more accurate risk evaluation.'], chips: ['GenAI', 'Compliance', 'Document review'] },
+      { id: 'search', n: 'Search & Retrieval', e: '🔎', ring: 2, a: 0.2, c: ['#fff0a8', '#e6b800'], tag: 'Hybrid search', pts: ['<b>Key-phrase mapping</b> with parallel execution for faster processing.', 'Hybrid search with filters for domain and country queries.', 'Enterprise chatbot on <b>Azure AI Search</b>.'], chips: ['Hybrid search', 'Azure AI Search', 'Parallel exec'] },
+      { id: 'route', n: 'Question Routing', e: '🧭', ring: 2, a: 2.4, c: ['#ffd0e8', '#e0489a'], tag: 'Fine-tuning + routing', pts: ['Fine-tuned OpenAI models, tested chunking and in-context prompting.', 'Cluster model routes each question to the right skill.', '<b>K-Means + vector search</b> for better question retrieval.'], chips: ['OpenAI', 'K-Means', 'Vector search'] },
+      { id: 'oss', n: 'Open Source', e: '🌍', ring: 2, a: 4.5, c: ['#c8f0ff', '#12a5c9'], tag: 'Community', pts: ['<a href="https://github.com/krishna0125/RFR" target="_blank">RiskCopilot (RFR)</a>: built for the Snowflake CoCo CLI hackathon.', 'Contributor to <a href="https://deepeval.com/" target="_blank">DeepEval</a>.'], chips: ['Snowflake', 'DeepEval', 'GitHub'] }
+    ];
+    const RINGS = [0.32, 0.56, 0.80];
+    const SPEED = [0.22, 0.14, 0.09];
+    const orrery = document.getElementById('orrery'), detail = document.getElementById('detail');
+    const els = {};
+    PLANETS.forEach(p => {
+      const b = document.createElement('button');
+      b.className = 'planet'; b.type = 'button'; b.dataset.name = p.n; b.setAttribute('aria-label', p.n);
+      b.style.setProperty('--c1', p.c[0]); b.style.setProperty('--c2', p.c[1]); b.textContent = p.e;
+      b.onclick = () => selectPlanet(p.id);
+      orrery.appendChild(b); els[p.id] = b;
     });
+    // ring sizes: radius fraction of half-width → diameter percent
+    orrery.querySelectorAll('.ring').forEach((r, i) => { r.style.width = r.style.height = (RINGS[i] * 100) + '%'; });
+
+    let paused = false, last = performance.now();
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    orrery.addEventListener('pointerover', e => { if (e.target.closest('.planet')) paused = true; });
+    orrery.addEventListener('pointerout', e => { if (e.target.closest('.planet')) paused = false; });
+    orrery.addEventListener('focusin', () => (paused = true));
+    orrery.addEventListener('focusout', () => (paused = false));
+    (function loop(now) {
+      const dt = Math.min((now - last) / 1000, .1); last = now;
+      PLANETS.forEach(p => {
+        if (!paused && !still) p.a += SPEED[p.ring] * dt;
+        const r = RINGS[p.ring] / 2 * 100;
+        els[p.id].style.left = (50 + r * Math.cos(p.a)) + '%';
+        els[p.id].style.top = (50 + r * Math.sin(p.a)) + '%';
+      });
+      requestAnimationFrame(loop);
+    })(last);
+
+    function selectPlanet(id) {
+      const p = PLANETS.find(x => x.id === id); if (!p) return;
+      Object.values(els).forEach(b => b.classList.remove('sel')); els[id].classList.add('sel');
+      detail.innerHTML = `<span class="tagline">${p.tag}</span><h3>${p.e} ${p.n}</h3><ul class="list">${p.pts.map(x => `<li>${x}</li>`).join('')}</ul><div class="chips">${p.chips.map(c => `<span class="chip">${c}</span>`).join('')}</div><p class="hint">Hover to pause · click another planet</p>`;
+      detail.classList.remove('swap'); void detail.offsetWidth; detail.classList.add('swap');
+    }
+    selectPlanet('po');
+
+    /* ================= Blueprint ================= */
+    const cap = document.getElementById('caption'), def = cap.innerHTML;
+    document.querySelectorAll('.bp .node').forEach(n => {
+      const on = () => (cap.innerHTML = n.dataset.cap), off = () => (cap.innerHTML = def);
+      n.addEventListener('mouseenter', on); n.addEventListener('focus', on); n.addEventListener('mouseleave', off); n.addEventListener('blur', off);
+    });
+    const plug = document.getElementById('plug'), newEls = document.querySelectorAll('.bp .newapi');
+    plug.addEventListener('click', () => {
+      const on = !newEls[0].classList.contains('on');
+      newEls.forEach(e => e.classList.toggle('on', on));
+      plug.textContent = on ? '✂️ Unplug it' : '⚡ Plug in a new API';
+      cap.innerHTML = on ? '<b>Done.</b> A new API is live through the registry. No code deploy.' : def;
+    });
+  })();
   </script>
 </body>
 </html>
